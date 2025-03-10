@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.ioc.Rango;
 import com.example.ioc.Repositorio;
 import com.example.ioc.Servicio;
+import com.example.util.Calculadora;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
@@ -49,7 +50,8 @@ public class DemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicación arrancada");
-		ejemplosIOC();
+		//ejemplosIOC();
+		ejemplosDePruebas();
 	}
 	
 	private void ejemplosIOC() {
@@ -64,6 +66,11 @@ public class DemoApplication implements CommandLineRunner {
 		System.err.println("Rango: " + rango);
 	}
 	
+	private void ejemplosDePruebas() {
+//		var calc = new Calculadora();
+//		System.out.print("Suma: " + calc.suma(2, 3));
+		
+	}
 	/*
 	 * @Bean
 	 * CommandLineRunner demo(){
