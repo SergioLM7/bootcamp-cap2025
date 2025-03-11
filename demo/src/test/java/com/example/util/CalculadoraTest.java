@@ -7,9 +7,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class CalculadoraTest {
+	
+	Calculadora calc;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -20,72 +23,106 @@ class CalculadoraTest {
 	}
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setup() throws Exception {
+		calc = new Calculadora();
 	}
 
 	@AfterEach
 	void tearDown() throws Exception {
 	}
+	
+	@Nested
+	@DisplayName("Método: suma")
+	class Suma {
+		
+		@Nested
+		@DisplayName("Casos válidos")
+		class OK {
+			@Test
+			@DisplayName("Suma de dos números enteros")
+			void testSuma() {		
+				var actual = calc.suma(2, 3);
 
-	@Test
-	@DisplayName("Suma de dos números enteros")
-	void testSuma() {
-		var calc = new Calculadora();
-		
-		var actual = calc.suma(2, 3);
+				assertEquals(5, actual);
+				
+			}
+			
+			@Test
+			@DisplayName("Suma de dos números reales")
+			void testSumaDoublesResta() {		
+				var actual = calc.suma(0.1, 0.2);
 
-		assertEquals(5, actual);
-		
-	}
-	@Test
-	@DisplayName("Suma de dos números enteros grandes")
-	void testSuma2() {
-		var calc = new Calculadora();
-		
-		var actual = calc.suma(Integer.MAX_VALUE, 1);
+				assertEquals(0.3, actual);
 
-		assertEquals(5.1, 1.0 /0);
+				
+			}
+			@Test
+			@DisplayName("Suma de dos números reales: resta")
+			void testSumaDoubles() {		
+				var actual = calc.suma(1, -0.9);
+				
+				assertEquals(0.1, calc.suma(1, -0.9));
+				
+			}
+			
+		}
 		
-	}
-	@Test
-	@DisplayName("Suma de dos números reales: resta")
-	void testSumaDoubles() {
-		var calc = new Calculadora();
-		
-		var actual = calc.suma(1, -0.9);
-		
-		assertEquals(0.1, calc.suma(1, -0.9));
+		@Nested
+		@DisplayName("Casos inválidos")
+		class KO {
+
+			
+			@Test
+			@DisplayName("Suma de dos números enteros grandes")
+			void testSuma2() {		
+				var actual = calc.suma(Integer.MAX_VALUE, 1);
+
+				assertEquals(5.1, 1.0 /0);
+				
+			}
+			
+		}
 		
 	}
 	
-	@Test
-	@DisplayName("Suma de dos números reales")
-	void testSumaDoublesResta() {
-		var calc = new Calculadora();
-		
-		var actual = calc.suma(0.1, 0.2);
-
-		assertEquals(0.3, actual);
-
-		
-	}
 	
-	@Test
-	@DisplayName("División de dos números enteros")
-	void testDivide() {
-		var calc = new Calculadora();
+	@Nested
+	@DisplayName("Método: divide")
+	class Divide {
 		
-		assertEquals(0.5, calc.divide(1.0 , 2));
-
+		@Nested
+		@DisplayName("Casos válidos")
+		class OK {
+	
+			@Test
+			@DisplayName("División de dos números enteros")
+			void testDivide() {		
+				assertEquals(0.5, calc.divide(1.0 , 2));
+			}
+			
+			@Test
+			@DisplayName("División por cero")
+			void testDivide2() {
+				var ex = assertThrows(ArithmeticException.class, () -> calc.divide(1,0));
+				assertEquals("/ by zero", ex.getMessage());
+			}
+			
+			@Test
+			@DisplayName("División por cero: try")
+			void testDivide3() {
+				try {
+					calc.divide(1,0);
+					fail("No se ha lanzado excepción");
+				} catch (ArithmeticException e) {
+					assertEquals("/ by zero", e.getMessage());
+				}	
+			}
+			
+			
+		}
+		
 		
 	}
 
-	@Test
-	@DisplayName("División por cero")
-	void testDivide2() {
-		var calc = new Calculadora();
-		var ex = assertThrows(ArithmeticException.class, () -> calc.divide(1,0));
-		assertEquals("/ by zero", ex.getMessage());
-		
-	}
-}
+
+} 
