@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class CalculadoraTest {
 	
@@ -52,17 +54,24 @@ class CalculadoraTest {
 			void testSumaDoublesResta() {		
 				var actual = calc.suma(0.1, 0.2);
 
-				assertEquals(0.3, actual);
-
-				
+				assertEquals(0.3, actual);				
 			}
+			
 			@Test
 			@DisplayName("Suma de dos números reales: resta")
 			void testSumaDoubles() {		
 				var actual = calc.suma(1, -0.9);
 				
 				assertEquals(0.1, calc.suma(1, -0.9));
-				
+			}
+			
+			@DisplayName("Suma de dos números reales: PARAMETRIZADO")
+			@ParameterizedTest(name = "{0} + {1} = {2}") 
+			@CsvSource({ "1,2,3", "2,-1,1", "-1,2,1", "-2,-1,-3", "0,0,0"})
+			void testSumaParametrizada(double operando1, double operando2, double expected) {		
+				var actual = calc.suma(operando1, operando2);
+
+				assertEquals(expected, actual);				
 			}
 			
 		}
