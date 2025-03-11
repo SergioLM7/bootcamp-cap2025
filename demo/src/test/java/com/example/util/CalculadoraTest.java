@@ -6,11 +6,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import com.example.utils.Smoke;
 
 class CalculadoraTest {
 	
@@ -42,11 +46,13 @@ class CalculadoraTest {
 		class OK {
 			@Test
 			@DisplayName("Suma de dos números enteros")
+			//@Tag("Smoke")
+			//Anotación personalizada para evitar que cometamos el error de meter mayúscula o minúscula cuando no corresponde
+			@Smoke
 			void testSuma() {		
 				var actual = calc.suma(2, 3);
 
 				assertEquals(5, actual);
-				
 			}
 			
 			@Test
@@ -76,11 +82,12 @@ class CalculadoraTest {
 			
 		}
 		
+		
 		@Nested
 		@DisplayName("Casos inválidos")
 		class KO {
 
-			
+			@Disabled
 			@Test
 			@DisplayName("Suma de dos números enteros grandes")
 			void testSuma2() {		
