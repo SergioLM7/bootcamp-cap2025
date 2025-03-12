@@ -2,6 +2,7 @@ package com.example.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,11 +14,16 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.mockito.Mockito.anyInt;
 
+import com.example.interfaces.CalculadoraInt;
 import com.example.ioc.Factura;
 import com.example.utils.Smoke;
 
@@ -174,7 +180,40 @@ class CalculadoraTest {
 			var actual = obj.calcularTotal(2, 2);
 			assertEquals(4, actual);
 		}
-}
+	}
+	
+	@Nested
+	@ExtendWith(MockitoExtension.class)
+	@DisplayName("Suplanta interfaz calculadora")
+	class SuplantaInterfaz {
+		
+		@Mock
+		private CalculadoraInt calculadora;
+		
+		@Test
+		void testRestaWithValue() {
+			
+			when(calculadora.resta()).thenReturn(10);
+			
+			int resultado = calculadora.resta();
+
+			assertEquals(10, resultado);
+			
+			verify(calculadora, times(1)).resta();
+		}
+		
+		@Test
+		void testMultiplicacionWithValue() {
+			
+			when(calculadora.multiplicacion()).thenReturn(6);
+			
+			int resultado = calculadora.multiplicacion();
+			
+			assertEquals(6, resultado);
+			
+			verify(calculadora, times(1)).multiplicacion();
+		}
+	}
 
 
 } 

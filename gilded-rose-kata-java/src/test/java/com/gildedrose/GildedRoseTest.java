@@ -140,7 +140,6 @@ class GildedRoseTest {
     
     
     //Opción con archivo CSV
-    
     @DisplayName("Todos los test de una")
 	@ParameterizedTest(name = "{0} = {3}; {1} = {4};  {2} = {5}") 
 	@CsvFileSource(resources = "/casos-de-prueba.csv", numLinesToSkip = 1)
