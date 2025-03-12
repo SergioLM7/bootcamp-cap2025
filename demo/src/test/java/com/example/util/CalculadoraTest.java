@@ -183,35 +183,31 @@ class CalculadoraTest {
 	}
 	
 	@Nested
-	@ExtendWith(MockitoExtension.class)
 	@DisplayName("Suplanta interfaz calculadora")
 	class SuplantaInterfaz {
 		
-		@Mock
-		private CalculadoraInt calculadora;
-		
 		@Test
 		void testRestaWithValue() {
+			var calc = mock(CalculadoraInt.class);
+			when(calc.resta()).thenReturn(10);
 			
-			when(calculadora.resta()).thenReturn(10);
-			
-			int resultado = calculadora.resta();
+			int resultado = calc.resta();
 
 			assertEquals(10, resultado);
 			
-			verify(calculadora, times(1)).resta();
+			verify(calc, times(1)).resta();
 		}
 		
 		@Test
 		void testMultiplicacionWithValue() {
+			var calc = mock(CalculadoraInt.class);
+			when(calc.multiplicacion()).thenReturn(6);
 			
-			when(calculadora.multiplicacion()).thenReturn(6);
-			
-			int resultado = calculadora.multiplicacion();
+			int resultado = calc.multiplicacion();
 			
 			assertEquals(6, resultado);
 			
-			verify(calculadora, times(1)).multiplicacion();
+			verify(calc, times(1)).multiplicacion();
 		}
 	}
 
