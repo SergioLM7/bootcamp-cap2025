@@ -22,6 +22,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.doNothing;
 
 import com.example.interfaces.CalculadoraInt;
 import com.example.ioc.Factura;
@@ -199,15 +200,13 @@ class CalculadoraTest {
 		}
 		
 		@Test
-		void testMultiplicacionWithValue() {
+		void testMultiplicacionNoValue() {
 			var calc = mock(CalculadoraInt.class);
-			when(calc.multiplicacion()).thenReturn(6);
+			doNothing().when(calc).multiplicacion();
 			
-			int resultado = calc.multiplicacion();
+			calc.multiplicacion();
 			
-			assertEquals(6, resultado);
-			
-			verify(calc, times(1)).multiplicacion();
+			verify(calc).multiplicacion();
 		}
 	}
 
