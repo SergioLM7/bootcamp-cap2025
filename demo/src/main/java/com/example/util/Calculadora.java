@@ -13,6 +13,10 @@ public class Calculadora {
 		return a + b;
 	}
 	
+	public int divide(int a, int b) {
+		return a / b;
+	}
+	
 	public double divide(double a, double b) {
 		if(b == 0 ) {
 			throw new ArithmeticException("/ by zero");

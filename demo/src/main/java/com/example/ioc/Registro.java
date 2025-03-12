@@ -2,6 +2,8 @@ package com.example.ioc;
 
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
+
 @Component
 public class Registro {
 
@@ -16,6 +18,5 @@ public class Registro {
 		//System.err.println("Registro creado...");
 	//}
 
-	
 
 }
