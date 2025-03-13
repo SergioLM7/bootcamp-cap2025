@@ -9,16 +9,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Sort;
 
 import com.example.domain.contracts.repositories.ActoresRepository;
+import com.example.domain.contracts.services.ActoresService;
 import com.example.domain.entities.Actor;
 import com.example.ioc.Rango;
 import com.example.ioc.Repositorio;
 import com.example.ioc.Servicio;
 import com.example.util.Calculadora;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
-	@Autowired
-	private ActoresRepository dao;
+//	@Autowired
+//	private ActoresRepository dao;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -53,12 +56,16 @@ public class DemoApplication implements CommandLineRunner {
 	Rango rango;
 	
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicación arrancada");
 		//ejemplosIOC();
 		//ejemplosDePruebas();
 		ejemplosDatos();
 	}
+	
+	@Autowired
+	private ActoresService serv;
 	
 	//Consultas CRUD a la BBDD para la tabla Actores
 	private void ejemplosDatos() {
@@ -89,7 +96,22 @@ public class DemoApplication implements CommandLineRunner {
 		// dao.findByActorIdGreaterThan(100).forEach(System.err::println);
 		//dao.findNovedadesSQL(101).forEach(System.err::println);
 		//dao.findNovedadesJPQL(101).forEach(System.err::println);
-		dao.findAll((root, query, builder) -> builder.lessThanOrEqualTo(root.get("actorId"), 5)).forEach((System.err::println));
+		//dao.findAll((root, query, builder) -> builder.lessThanOrEqualTo(root.get("actorId"), 5)).forEach((System.err::println));
+		//serv.getAll().forEach(System.err::println);
+		
+		
+		var item = serv.getOne(1);
+		if(item.isPresent()) {
+			var actor = item.get();
+			System.err.println(item + "\nPeliculas:");
+			actor.getFilmActors().forEach(a -> System.err.println(a.getFilm().getTitle()));
+
+		} else {
+			System.err.println("No se ha encontrado el actor");
+		}
+		
+		
+	
 	}
 	
 	private void ejemplosIOC() {
