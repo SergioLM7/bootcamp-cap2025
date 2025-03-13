@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Sort;
 
 import com.example.domain.contracts.repositories.ActoresRepository;
 import com.example.domain.entities.Actor;
@@ -61,15 +62,15 @@ public class DemoApplication implements CommandLineRunner {
 	
 	//Consultas CRUD a la BBDD para la tabla Actores
 	private void ejemplosDatos() {
-		var item = dao.findById(202);
-		if(item.isPresent()) {
-			var actor = item.get();
-			actor.setFirstName("Juan");
-			actor.setLastName(actor.getLastName().toUpperCase());
-			dao.save(actor);
-		} else {
-			System.err.println("No se ha encontrado al actor.");
-		}
+//		var item = dao.findById(202);
+//		if(item.isPresent()) {
+//			var actor = item.get();
+//			actor.setFirstName("Juan");
+//			actor.setLastName(actor.getLastName().toUpperCase());
+//			dao.save(actor);
+//		} else {
+//			System.err.println("No se ha encontrado al actor.");
+//		}
 		
 		//Si no existe la instancia en la BBDD, la crea, si existe, la REEMPLAZA
 		//Si no tiene clave, genera el insert, y si tiene clave, la busca para ver si hace update
@@ -77,11 +78,16 @@ public class DemoApplication implements CommandLineRunner {
 			//dao.save(actor);
 		
 		//Busca todos los Actores y los imprime en pantalla
-		dao.findAll().forEach(System.err::println);
+		//dao.findAll().forEach(System.err::println);
 		
 //		dao.deleteById(202);
 //		dao.findAll().forEach(System.err::println);
+		
+		
+		//dao.findTop100ByFirstNameStartingWithOrderByLastNameDesc("P").forEach(System.err::println);
+		//dao.findTop100ByFirstNameStartingWith("P", Sort.by("FirstName").ascending()).forEach(System.err::println);
 
+		dao.findByActorIdGreaterThan(100).forEach(System.err::println);
 	}
 	
 	private void ejemplosIOC() {
