@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -18,12 +18,13 @@ public class Country implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="country_id")
+	@Column(name="country_id", unique=true, nullable=false)
 	private int countryId;
 
+	@Column(nullable=false, length=50)
 	private String country;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to City

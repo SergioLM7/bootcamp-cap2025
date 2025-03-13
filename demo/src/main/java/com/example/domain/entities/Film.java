@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -19,36 +19,38 @@ public class Film implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="film_id")
+	@Column(name="film_id", unique=true, nullable=false)
 	private int filmId;
 
 	@Lob
 	private String description;
 
-	@Column(name="last_update", insertable=false, updatable=false)
+	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	private Timestamp lastUpdate;
 
 	private int length;
 
+	@Column(length=1)
 	private String rating;
 
 	@Column(name="release_year")
 	private Short releaseYear;
 
-	@Column(name="rental_duration")
+	@Column(name="rental_duration", nullable=false)
 	private byte rentalDuration;
 
-	@Column(name="rental_rate")
+	@Column(name="rental_rate", nullable=false, precision=10, scale=2)
 	private BigDecimal rentalRate;
 
-	@Column(name="replacement_cost")
+	@Column(name="replacement_cost", nullable=false, precision=10, scale=2)
 	private BigDecimal replacementCost;
 
+	@Column(nullable=false, length=128)
 	private String title;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="language_id")
+	@JoinColumn(name="language_id", nullable=false)
 	private Language language;
 
 	//bi-directional many-to-one association to Language

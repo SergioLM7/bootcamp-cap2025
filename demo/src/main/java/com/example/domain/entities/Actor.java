@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -18,16 +18,16 @@ public class Actor implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="actor_id")
+	@Column(name="actor_id", unique=true, nullable=false)
 	private int actorId;
 
-	@Column(name="first_name")
+	@Column(name="first_name", nullable=false, length=45)
 	private String firstName;
 
-	@Column(name="last_name")
+	@Column(name="last_name", nullable=false, length=45)
 	private String lastName;
 
-	@Column(name="last_update")
+	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to FilmActor

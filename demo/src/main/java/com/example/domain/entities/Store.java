@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -18,10 +18,10 @@ public class Store implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="store_id")
+	@Column(name="store_id", unique=true, nullable=false)
 	private byte storeId;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Customer
@@ -38,12 +38,12 @@ public class Store implements Serializable {
 
 	//bi-directional many-to-one association to Address
 	@ManyToOne
-	@JoinColumn(name="address_id")
+	@JoinColumn(name="address_id", nullable=false)
 	private Address address;
 
 	//bi-directional many-to-one association to Staff
 	@ManyToOne
-	@JoinColumn(name="manager_staff_id")
+	@JoinColumn(name="manager_staff_id", nullable=false)
 	private Staff staff;
 
 	public Store() {

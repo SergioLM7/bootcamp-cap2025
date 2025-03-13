@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -18,17 +18,17 @@ public class FilmActor implements Serializable {
 	@EmbeddedId
 	private FilmActorPK id;
 
-	@Column(name="last_update")
+	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
-	@JoinColumn(name="actor_id")
+	@JoinColumn(name="actor_id", nullable=false, insertable=false, updatable=false)
 	private Actor actor;
 
 	//bi-directional many-to-one association to Film
 	@ManyToOne
-	@JoinColumn(name="film_id")
+	@JoinColumn(name="film_id", nullable=false, insertable=false, updatable=false)
 	private Film film;
 
 	public FilmActor() {

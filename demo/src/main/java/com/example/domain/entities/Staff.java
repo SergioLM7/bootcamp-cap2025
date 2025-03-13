@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -18,27 +18,31 @@ public class Staff implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="staff_id")
+	@Column(name="staff_id", unique=true, nullable=false)
 	private byte staffId;
 
+	@Column(nullable=false)
 	private byte active;
 
+	@Column(length=50)
 	private String email;
 
-	@Column(name="first_name")
+	@Column(name="first_name", nullable=false, length=45)
 	private String firstName;
 
-	@Column(name="last_name")
+	@Column(name="last_name", nullable=false, length=45)
 	private String lastName;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
+	@Column(length=40)
 	private String password;
 
 	@Lob
 	private byte[] picture;
 
+	@Column(nullable=false, length=16)
 	private String username;
 
 	//bi-directional many-to-one association to Payment
@@ -51,12 +55,12 @@ public class Staff implements Serializable {
 
 	//bi-directional many-to-one association to Address
 	@ManyToOne
-	@JoinColumn(name="address_id")
+	@JoinColumn(name="address_id", nullable=false)
 	private Address address;
 
 	//bi-directional many-to-one association to Store
 	@ManyToOne
-	@JoinColumn(name="store_id")
+	@JoinColumn(name="store_id", nullable=false)
 	private Store store;
 
 	//bi-directional many-to-one association to Store

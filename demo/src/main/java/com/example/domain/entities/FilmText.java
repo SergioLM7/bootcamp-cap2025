@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -16,12 +16,13 @@ public class FilmText implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="film_id")
+	@Column(name="film_id", unique=true, nullable=false)
 	private short filmId;
 
 	@Lob
 	private String description;
 
+	@Column(nullable=false, length=255)
 	private String title;
 
 	public FilmText() {

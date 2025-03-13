@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -18,28 +18,30 @@ public class Address implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="address_id")
+	@Column(name="address_id", unique=true, nullable=false)
 	private int addressId;
 
+	@Column(nullable=false, length=50)
 	private String address;
 
+	@Column(length=50)
 	private String address2;
 
+	@Column(nullable=false, length=20)
 	private String district;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
-	private Object location;
-
+	@Column(nullable=false, length=20)
 	private String phone;
 
-	@Column(name="postal_code")
+	@Column(name="postal_code", length=10)
 	private String postalCode;
 
 	//bi-directional many-to-one association to City
 	@ManyToOne
-	@JoinColumn(name="city_id")
+	@JoinColumn(name="city_id", nullable=false)
 	private City city;
 
 	//bi-directional many-to-one association to Customer
@@ -95,14 +97,6 @@ public class Address implements Serializable {
 
 	public void setLastUpdate(Timestamp lastUpdate) {
 		this.lastUpdate = lastUpdate;
-	}
-
-	public Object getLocation() {
-		return this.location;
-	}
-
-	public void setLocation(Object location) {
-		this.location = location;
 	}
 
 	public String getPhone() {

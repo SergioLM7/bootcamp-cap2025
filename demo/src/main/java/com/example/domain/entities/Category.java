@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -18,12 +18,13 @@ public class Category implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="category_id")
+	@Column(name="category_id", unique=true, nullable=false)
 	private int categoryId;
 
-	@Column(name="last_update")
+	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	private Timestamp lastUpdate;
 
+	@Column(nullable=false, length=25)
 	private String name;
 
 	//bi-directional many-to-one association to FilmCategory

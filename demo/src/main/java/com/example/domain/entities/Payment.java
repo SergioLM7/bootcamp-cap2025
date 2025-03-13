@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -19,21 +19,22 @@ public class Payment implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="payment_id")
+	@Column(name="payment_id", unique=true, nullable=false)
 	private int paymentId;
 
+	@Column(nullable=false, precision=10, scale=2)
 	private BigDecimal amount;
 
 	@Column(name="last_update")
 	private Timestamp lastUpdate;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="payment_date")
+	@Column(name="payment_date", nullable=false)
 	private Date paymentDate;
 
 	//bi-directional many-to-one association to Customer
 	@ManyToOne
-	@JoinColumn(name="customer_id")
+	@JoinColumn(name="customer_id", nullable=false)
 	private Customer customer;
 
 	//bi-directional many-to-one association to Rental
@@ -43,7 +44,7 @@ public class Payment implements Serializable {
 
 	//bi-directional many-to-one association to Staff
 	@ManyToOne
-	@JoinColumn(name="staff_id")
+	@JoinColumn(name="staff_id", nullable=false)
 	private Staff staff;
 
 	public Payment() {

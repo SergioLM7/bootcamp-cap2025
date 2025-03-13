@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -18,12 +18,13 @@ public class Language implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="language_id")
+	@Column(name="language_id", insertable=false, updatable=false, unique=true, nullable=false)
 	private int languageId;
 
-	@Column(name="last_update", insertable=false, updatable=false)
+	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	private Timestamp lastUpdate;
 
+	@Column(nullable=false, length=20)
 	private String name;
 
 	//bi-directional many-to-one association to Film

@@ -1,4 +1,4 @@
-package com.domain.entities;
+package com.example.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
@@ -12,10 +12,10 @@ public class FilmActorPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="actor_id", insertable=false, updatable=false)
+	@Column(name="actor_id", insertable=false, updatable=false, unique=true, nullable=false)
 	private int actorId;
 
-	@Column(name="film_id", insertable=false, updatable=false)
+	@Column(name="film_id", insertable=false, updatable=false, unique=true, nullable=false)
 	private int filmId;
 
 	public FilmActorPK() {
