@@ -3,7 +3,9 @@ package com.sergiolillo.domain.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sergiolillo.domain.contracts.repositories.CategoryRepository;
 import com.sergiolillo.domain.contracts.services.CategoryService;
@@ -22,20 +24,34 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public List<Category> getAll() {
-		return dao.findAll();
+		List<Category> categories = dao.findAll();
+        categories.forEach(category -> Hibernate.initialize(category.getFilmCategories()));
+
+		return categories;
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public Optional<Category> getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		Optional<Category> category = dao.findById(id);
+        Hibernate.initialize(category.get().getFilmCategories());
+
+		return category;
 	}
 
 	@Override
 	public Category add(Category item) throws DuplicateKeyException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("La categoría no puede ser nula");
+		}
+		
+		if(item.getCategoryId() > 0 && dao.existsById(item.getCategoryId())) {
+			throw new DuplicateKeyException("Esta categoría ya está registrada.");
+		}
+		
+		return dao.save(item);
 	}
 
 	@Override

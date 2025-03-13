@@ -3,7 +3,9 @@ package com.sergiolillo.domain.entities;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -33,6 +35,14 @@ public class Category implements Serializable {
 
 	public Category() {
 	}
+	
+	public Category(int categoryId, String name, List<FilmCategory> filmCategories) {
+		this.categoryId = categoryId;
+	    this.name = name;
+	    this.filmCategories = filmCategories == null ? new ArrayList<>() : filmCategories;
+	    this.lastUpdate = new Timestamp(System.currentTimeMillis()); 
+	}
+
 
 	public int getCategoryId() {
 		return this.categoryId;
@@ -83,8 +93,28 @@ public class Category implements Serializable {
 	@Override
 	public String toString() {
 		return "Category [categoryId=" + categoryId + ", lastUpdate=" + lastUpdate + ", name=" + name
-				+ /*", filmCategories=" + filmCategories*/ "]";
+				+ ", filmCategories=" + filmCategories + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(categoryId, filmCategories, lastUpdate, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		return categoryId == other.categoryId && Objects.equals(filmCategories, other.filmCategories)
+				&& Objects.equals(lastUpdate, other.lastUpdate) && Objects.equals(name, other.name);
+	}
+	
+	
 	
 	
 
