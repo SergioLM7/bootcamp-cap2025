@@ -59,11 +59,13 @@ public class Film implements Serializable {
 	private Language languageVO;
 
 	//bi-directional many-to-one association to FilmActor
-	@OneToMany(mappedBy="film")
+	//Cuando se guarde la película, si hay cambios en el filmActor, también los aplicará
+	//El orphanRemoval le dice que si va a borrar la película, primero borre las relaciones
+	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FilmActor> filmActors;
 
 	//bi-directional many-to-one association to FilmCategory
-	@OneToMany(mappedBy="film")
+	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FilmCategory> filmCategories;
 
 	//bi-directional many-to-one association to Inventory
