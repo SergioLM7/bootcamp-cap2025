@@ -21,7 +21,7 @@ public interface ActoresRepository extends JpaRepository<Actor, Integer>, JpaSpe
 	List<Actor> findNovedadesJPQL (int id);
 	
 	//Pide la fila en base a una columna de la tabla
-	@Query(value="SELECT a FROM actor a WHERE a.actor_id > :id", nativeQuery=true)
+	@Query(value="SELECT * FROM actor WHERE actor_id > :id", nativeQuery=true)
 	List<Actor> findNovedadesSQL (int id);
 
 }

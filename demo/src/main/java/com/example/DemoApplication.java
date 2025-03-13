@@ -80,14 +80,16 @@ public class DemoApplication implements CommandLineRunner {
 		//Busca todos los Actores y los imprime en pantalla
 		//dao.findAll().forEach(System.err::println);
 		
-//		dao.deleteById(202);
-//		dao.findAll().forEach(System.err::println);
+		//	dao.deleteById(202);
+		//	dao.findAll().forEach(System.err::println);
 		
 		
 		//dao.findTop100ByFirstNameStartingWithOrderByLastNameDesc("P").forEach(System.err::println);
 		//dao.findTop100ByFirstNameStartingWith("P", Sort.by("FirstName").ascending()).forEach(System.err::println);
-
-		dao.findByActorIdGreaterThan(100).forEach(System.err::println);
+		// dao.findByActorIdGreaterThan(100).forEach(System.err::println);
+		//dao.findNovedadesSQL(101).forEach(System.err::println);
+		//dao.findNovedadesJPQL(101).forEach(System.err::println);
+		dao.findAll((root, query, builder) -> builder.lessThanOrEqualTo(root.get("actorId"), 5)).forEach((System.err::println));
 	}
 	
 	private void ejemplosIOC() {
