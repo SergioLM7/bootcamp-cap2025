@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.domain.contracts.repositories.ActoresRepository;
+import com.example.domain.entities.Actor;
 import com.example.ioc.Rango;
 import com.example.ioc.Repositorio;
 import com.example.ioc.Servicio;
@@ -58,9 +59,29 @@ public class DemoApplication implements CommandLineRunner {
 		ejemplosDatos();
 	}
 	
-	
+	//Consultas CRUD a la BBDD para la tabla Actores
 	private void ejemplosDatos() {
+		var item = dao.findById(202);
+		if(item.isPresent()) {
+			var actor = item.get();
+			actor.setFirstName("Juan");
+			actor.setLastName(actor.getLastName().toUpperCase());
+			dao.save(actor);
+		} else {
+			System.err.println("No se ha encontrado al actor.");
+		}
+		
+		//Si no existe la instancia en la BBDD, la crea, si existe, la REEMPLAZA
+		//Si no tiene clave, genera el insert, y si tiene clave, la busca para ver si hace update
+			//var actor = new Actor(0, "Pepe", "Galindo");
+			//dao.save(actor);
+		
+		//Busca todos los Actores y los imprime en pantalla
 		dao.findAll().forEach(System.err::println);
+		
+//		dao.deleteById(202);
+//		dao.findAll().forEach(System.err::println);
+
 	}
 	
 	private void ejemplosIOC() {
