@@ -38,7 +38,7 @@ public class CatalogoApplication implements CommandLineRunner {
 	public void checkCategory() {
 		//serv.getAll().forEach(System.err::println);
 		//System.err.println(serv.getOne(15));
-	    try {
+	   /* try {
 			serv.add(new Category(0, "Prueba3", new ArrayList<FilmCategory>()));
 			serv.getAll().forEach(System.err::println);
 			
@@ -47,6 +47,12 @@ public class CatalogoApplication implements CommandLineRunner {
 			e.printStackTrace();
 		} catch (InvalidDataException e) {
 			System.err.println(e);
+			e.printStackTrace();
+		}*/
+		try {
+			serv.deleteById(18);
+			serv.getAll().forEach(System.err::println);
+		} catch (InvalidDataException e) {
 			e.printStackTrace();
 		}
 	}

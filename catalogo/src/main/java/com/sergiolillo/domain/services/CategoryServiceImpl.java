@@ -67,9 +67,19 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+	@Transactional
+	public void deleteById(Integer id) throws InvalidDataException {
+	    if (!dao.existsById(id)) {
+	        throw new InvalidDataException("La categoría con el ID " + id + " no existe.");
+	    }
+
+	    Category category = dao.findById(id).orElseThrow(() -> new InvalidDataException("La categoría no existe"));
+
+	    category.getFilmCategories().forEach(filmCategory -> {
+	        filmCategory.setCategory(null);
+	    });
+
+	    dao.deleteById(id);
 	}
 
 }
