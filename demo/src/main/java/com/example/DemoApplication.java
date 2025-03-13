@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.example.domain.contracts.repositories.ActoresRepository;
 import com.example.ioc.Rango;
 import com.example.ioc.Repositorio;
 import com.example.ioc.Servicio;
@@ -14,7 +15,9 @@ import com.example.util.Calculadora;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
-
+	@Autowired
+	private ActoresRepository dao;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
@@ -51,7 +54,13 @@ public class DemoApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicación arrancada");
 		//ejemplosIOC();
-		ejemplosDePruebas();
+		//ejemplosDePruebas();
+		ejemplosDatos();
+	}
+	
+	
+	private void ejemplosDatos() {
+		dao.findAll().forEach(System.err::println);
 	}
 	
 	private void ejemplosIOC() {
