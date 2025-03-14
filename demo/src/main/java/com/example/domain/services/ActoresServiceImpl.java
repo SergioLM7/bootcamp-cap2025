@@ -37,6 +37,10 @@ public class ActoresServiceImpl implements ActoresService {
 			throw new InvalidDataException("El actor no puede ser nulo.");
 		}
 		
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		
 		//Compruebo primero si el id de lo que me está llegando es mayor que cero
 		// si no, ni consulto a la BBDD para no gastar recursos para nada
 		if(item.getActorId() > 0 && dao.existsById(item.getActorId())) {

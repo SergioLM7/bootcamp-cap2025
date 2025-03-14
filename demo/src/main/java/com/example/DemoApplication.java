@@ -20,8 +20,8 @@ import jakarta.transaction.Transactional;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
-//	@Autowired
-//	private ActoresRepository dao;
+	@Autowired
+	private ActoresRepository dao;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -81,8 +81,12 @@ public class DemoApplication implements CommandLineRunner {
 		
 		//Si no existe la instancia en la BBDD, la crea, si existe, la REEMPLAZA
 		//Si no tiene clave, genera el insert, y si tiene clave, la busca para ver si hace update
-			//var actor = new Actor(0, "Pepe", "Galindo");
-			//dao.save(actor);
+		var actor = new Actor(0, "PEPE", " ");
+		if(actor.isValid()) {
+			dao.save(actor);
+		} else {
+			System.err.println(actor.getErrorsMessage());
+		}
 		
 		//Busca todos los Actores y los imprime en pantalla
 		//dao.findAll().forEach(System.err::println);
@@ -100,15 +104,15 @@ public class DemoApplication implements CommandLineRunner {
 		//serv.getAll().forEach(System.err::println);
 		
 		
-		var item = serv.getOne(1);
-		if(item.isPresent()) {
-			var actor = item.get();
-			System.err.println(item + "\nPeliculas:");
-			actor.getFilmActors().forEach(a -> System.err.println(a.getFilm().getTitle()));
-
-		} else {
-			System.err.println("No se ha encontrado el actor");
-		}
+//		var item = serv.getOne(1);
+//		if(item.isPresent()) {
+//			var actor = item.get();
+//			System.err.println(item + "\nPeliculas:");
+//			actor.getFilmActors().forEach(a -> System.err.println(a.getFilm().getTitle()));
+//
+//		} else {
+//			System.err.println("No se ha encontrado el actor");
+//		}
 		
 		
 	
