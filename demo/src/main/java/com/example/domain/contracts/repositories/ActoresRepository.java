@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.domain.entities.Actor;
+import com.example.domain.entities.DTO.ActorDTO;
+import com.example.domain.entities.DTO.ActorShort;
 
 public interface ActoresRepository extends JpaRepository<Actor, Integer>, JpaSpecificationExecutor<Actor> {
 
@@ -23,5 +25,12 @@ public interface ActoresRepository extends JpaRepository<Actor, Integer>, JpaSpe
 	//Pide la fila en base a una columna de la tabla
 	@Query(value="SELECT * FROM actor WHERE actor_id > :id", nativeQuery=true)
 	List<Actor> findNovedadesSQL (int id);
+	
+	//No se puede sobrecargar el mismo método pero con valor de devolución diferente. Por eso le cambiamos el get por query
+	List<ActorDTO> queryByActorIdGreaterThan(int id);
+	
+	List<ActorShort> getByActorIdGreaterThan(int id);
+	
+	<T> List<T> findByActorIdGreaterThan(int id, Class<T> type);
 
 }

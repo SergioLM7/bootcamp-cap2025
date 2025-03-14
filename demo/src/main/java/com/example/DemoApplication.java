@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import com.example.domain.contracts.repositories.ActoresRepository;
 import com.example.domain.contracts.services.ActoresService;
 import com.example.domain.entities.Actor;
+import com.example.domain.entities.DTO.ActorDTO;
+import com.example.domain.entities.DTO.ActorShort;
 import com.example.ioc.Rango;
 import com.example.ioc.Repositorio;
 import com.example.ioc.Servicio;
@@ -81,12 +83,19 @@ public class DemoApplication implements CommandLineRunner {
 		
 		//Si no existe la instancia en la BBDD, la crea, si existe, la REEMPLAZA
 		//Si no tiene clave, genera el insert, y si tiene clave, la busca para ver si hace update
-		var actor = new Actor(0, "PEPE", " ");
-		if(actor.isValid()) {
-			dao.save(actor);
-		} else {
-			System.err.println(actor.getErrorsMessage());
-		}
+//		var actor = new Actor(0, "PEPE", " ");
+//		if(actor.isValid()) {
+//			dao.save(actor);
+//		} else {
+//			System.err.println(actor.getErrorsMessage());
+//		}
+		//dao.findAll().forEach(o -> System.err.println(ActorDTO.from(o)));
+		//dao.queryByActorIdGreaterThan(200).forEach(System.err::println);
+//		dao.getByActorIdGreaterThan(200).forEach(o -> System.err.println(o.getId() + " " + o.getNombre()));
+		dao.findByActorIdGreaterThan(200).forEach(System.err::println);
+		dao.findByActorIdGreaterThan(200, ActorDTO.class).forEach(System.err::println);
+		dao.findByActorIdGreaterThan(200, ActorShort.class).forEach(o -> System.err.println(o.getId() + " " + o.getNombre()));
+
 		
 		//Busca todos los Actores y los imprime en pantalla
 		//dao.findAll().forEach(System.err::println);
