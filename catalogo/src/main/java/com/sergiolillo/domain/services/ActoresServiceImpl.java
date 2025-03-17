@@ -48,26 +48,30 @@ public class ActoresServiceImpl implements ActoresService {
 
 	@Override
 	public Actor modify(Actor item) throws NotFoundException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("El actor no puede ser nulo.");
+		}
+		
+		if(!dao.existsById(item.getActorId())) {
+			throw new NotFoundException("El actor no existe.");
+		}
+
+		return dao.save(item);
 	}
 
 	@Override
 	public void delete(Actor item) throws InvalidDataException {
-		// TODO Auto-generated method stub
-		
+		if(dao.findById(item.getActorId()) != null) {
+			dao.delete(item);
+		}
+		throw new InvalidDataException("El actor no existe.");
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void repartePremios() {
-		// TODO Auto-generated method stub
-		
+	public void deleteById(Integer id) throws NotFoundException {
+		if(!dao.findById(id).isPresent()) {
+			throw new NotFoundException("El actor no existe.");
+		}
 	}
 
 }

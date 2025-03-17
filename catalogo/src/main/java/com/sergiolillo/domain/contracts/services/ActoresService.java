@@ -5,6 +5,4 @@ import com.sergiolillo.domain.entities.Actor;
 
 public interface ActoresService extends DomainService<Actor, Integer> {
 
-	void repartePremios();
-	
 }

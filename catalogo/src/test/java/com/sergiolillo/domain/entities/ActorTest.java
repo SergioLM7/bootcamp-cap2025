@@ -1,4 +1,4 @@
-package com.sergiolillo.entities;
+package com.sergiolillo.domain.entities;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,8 +12,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import com.sergiolillo.domain.entities.Actor;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
