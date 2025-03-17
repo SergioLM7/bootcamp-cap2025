@@ -2,10 +2,17 @@ package com.sergiolillo.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
@@ -21,16 +28,23 @@ public class Category implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="category_id", unique=true, nullable=false)
+	@JsonProperty("id")
 	private int categoryId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@JsonIgnore
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=25)
+	@NotBlank(message="El nombre no puede estar vacío ni ser nulo")
+	@Size(max=45, min=2, message="La longitud del nombre debe estar entre 2 y 45 caracteres")
+	@Pattern(regexp="^[A-ZÀ-Ö ]+$", message="El nombre debe estar en mayúsculas")
+	@JsonProperty("category")
 	private String name;
 
 	//bi-directional many-to-one association to FilmCategory
 	@OneToMany(mappedBy="category")
+	@JsonIgnore
 	private List<FilmCategory> filmCategories;
 
 	public Category() {
@@ -76,24 +90,10 @@ public class Category implements Serializable {
 		this.filmCategories = filmCategories;
 	}
 
-	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().add(filmCategory);
-		filmCategory.setCategory(this);
-
-		return filmCategory;
-	}
-
-	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().remove(filmCategory);
-		filmCategory.setCategory(null);
-
-		return filmCategory;
-	}
-
 	@Override
 	public String toString() {
-		return "Category [categoryId=" + categoryId + ", lastUpdate=" + lastUpdate + ", name=" + name
-				+ ", filmCategories=" + filmCategories + "]";
+		return "Category [categoryId=" + categoryId + ", name=" + name
+				+  ", lastUpdate=" + lastUpdate + "]";
 	}
 
 	@Override
@@ -113,9 +113,6 @@ public class Category implements Serializable {
 		return categoryId == other.categoryId && Objects.equals(filmCategories, other.filmCategories)
 				&& Objects.equals(lastUpdate, other.lastUpdate) && Objects.equals(name, other.name);
 	}
-	
-	
-	
 	
 
 }
