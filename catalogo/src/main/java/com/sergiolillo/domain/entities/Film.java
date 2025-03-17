@@ -2,9 +2,16 @@ package com.sergiolillo.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -27,25 +34,35 @@ public class Film implements Serializable {
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	private Timestamp lastUpdate;
-
+	
+	@Min(1)
 	private int length;
 
 	@Column(length=1)
 	private String rating;
 
 	@Column(name="release_year")
+	@Min(1900)
 	private Short releaseYear;
 
 	@Column(name="rental_duration", nullable=false)
+	@NotNull(message="La rentalDuration no puede ser nula")
+	@Min(1)
 	private byte rentalDuration;
 
 	@Column(name="rental_rate", nullable=false, precision=10, scale=2)
+	@NotNull(message="El rentalRate no puede ser nulo")
+	@Min(1)
 	private BigDecimal rentalRate;
 
 	@Column(name="replacement_cost", nullable=false, precision=10, scale=2)
+	@NotNull(message="El replacementCost no puede ser nulo")
+	@Min(1)
 	private BigDecimal replacementCost;
 
 	@Column(nullable=false, length=128)
+	@NotBlank(message="El title no puede ser nulo ni estar vacío")
+	@Size(max=128, min=2, message="La longitud del título debe estar entre 2 y 128 caracteres")
 	private String title;
 
 	//bi-directional many-to-one association to Language
@@ -70,6 +87,29 @@ public class Film implements Serializable {
 
 	public Film() {
 	}
+	
+	
+
+	public Film(int filmId, String description, int length, String rating, Short releaseYear,
+			byte rentalDuration, BigDecimal rentalRate, BigDecimal replacementCost, String title,
+			Language language) {
+		super();
+		this.filmId = filmId;
+		this.description = description;
+		this.lastUpdate = new Timestamp(System.currentTimeMillis());
+		this.length = length;
+		this.rating = rating;
+		this.releaseYear = releaseYear;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.replacementCost = replacementCost;
+		this.title = title;
+		this.language = language;
+	    this.filmActors = new ArrayList<>();
+	    this.filmCategories = new ArrayList<>();
+	}
+
+
 
 	public int getFilmId() {
 		return this.filmId;
@@ -171,10 +211,6 @@ public class Film implements Serializable {
 		return this.filmActors;
 	}
 
-	public void setFilmActors(List<FilmActor> filmActors) {
-		this.filmActors = filmActors;
-	}
-
 	public FilmActor addFilmActor(FilmActor filmActor) {
 		getFilmActors().add(filmActor);
 		filmActor.setFilm(this);
@@ -193,10 +229,6 @@ public class Film implements Serializable {
 		return this.filmCategories;
 	}
 
-	public void setFilmCategories(List<FilmCategory> filmCategories) {
-		this.filmCategories = filmCategories;
-	}
-
 	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
 		getFilmCategories().add(filmCategory);
 		filmCategory.setFilm(this);
@@ -210,5 +242,36 @@ public class Film implements Serializable {
 
 		return filmCategory;
 	}
+
+	@Override
+	public String toString() {
+		return "Film [filmId=" + filmId + ", description=" + description + ", releaseYear=" + releaseYear + ", title="
+				+ title + ", language=" + language + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, filmId, lastUpdate, length, rating, releaseYear, rentalDuration, rentalRate,
+				replacementCost, title);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Film other = (Film) obj;
+		return Objects.equals(description, other.description) && filmId == other.filmId
+				&& Objects.equals(lastUpdate, other.lastUpdate) && length == other.length
+				&& Objects.equals(rating, other.rating) && Objects.equals(releaseYear, other.releaseYear)
+				&& rentalDuration == other.rentalDuration && Objects.equals(rentalRate, other.rentalRate)
+				&& Objects.equals(replacementCost, other.replacementCost) && Objects.equals(title, other.title);
+	}
+	
+	
+	
 
 }

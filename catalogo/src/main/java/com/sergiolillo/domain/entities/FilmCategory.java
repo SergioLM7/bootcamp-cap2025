@@ -3,6 +3,7 @@ package com.sergiolillo.domain.entities;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 
 /**
@@ -66,4 +67,27 @@ public class FilmCategory implements Serializable {
 		this.film = film;
 	}
 
+	@Override
+	public String toString() {
+		return "FilmCategory [id=" + id + ", film=" + film + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(category, film, id, lastUpdate);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FilmCategory other = (FilmCategory) obj;
+		return Objects.equals(category, other.category) && Objects.equals(film, other.film)
+				&& Objects.equals(id, other.id) && Objects.equals(lastUpdate, other.lastUpdate);
+	}
+	
 }
