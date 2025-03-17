@@ -73,7 +73,7 @@ public class ActorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"john", " ", "caño", "12345", "María del Mar"})
+    @ValueSource(strings = {"john", "", "caño", "12345", "María del Mar"})
     public void testInvalidFirstNames(String firstName) {
         Actor actor = new Actor(1, firstName, "DOE");
         actor.setLastUpdate(new Timestamp(System.currentTimeMillis()));
@@ -113,7 +113,7 @@ public class ActorTest {
     }
     
     @ParameterizedTest
-    @ValueSource(strings = {"GARCÍa", " ", "caño", "12345", "DE TODOS LOS SANTOS1"})
+    @ValueSource(strings = {"GARCÍa", "", "caño", "12345", "DE TODOS LOS SANTOS1"})
     public void testInvalidLastName(String lastName) {
         Actor actor = new Actor(1, "JUAN", lastName);
         actor.setLastUpdate(new Timestamp(System.currentTimeMillis()));

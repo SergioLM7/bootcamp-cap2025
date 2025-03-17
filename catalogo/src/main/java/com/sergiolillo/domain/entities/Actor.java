@@ -96,28 +96,6 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 		this.lastUpdate = lastUpdate;
 	}
 
-	public List<FilmActor> getFilmActors() {
-		return this.filmActors;
-	}
-
-	public void setFilmActors(List<FilmActor> filmActors) {
-		this.filmActors = filmActors;
-	}
-
-	public FilmActor addFilmActor(FilmActor filmActor) {
-		getFilmActors().add(filmActor);
-		filmActor.setActor(this);
-
-		return filmActor;
-	}
-
-	public FilmActor removeFilmActor(FilmActor filmActor) {
-		getFilmActors().remove(filmActor);
-		filmActor.setActor(null);
-
-		return filmActor;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(actorId);
@@ -137,8 +115,7 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Actor [actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + ", lastUpdate="
-				+ lastUpdate + "]";
+		return "Actor [actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
 	
 	//Si tuviésemos propiedades para hacer esto...

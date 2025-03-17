@@ -30,10 +30,8 @@ public class ActoresServiceImpl implements ActoresService {
 	}
 
 	@Override
-	@Transactional(readOnly=true)
 	public Optional<Actor> getOne(Integer id) {
 		Optional<Actor> actor = dao.findById(id);
-		actor.ifPresent(a -> a.getFilmActors().size());
 		
 		return actor;
 	}

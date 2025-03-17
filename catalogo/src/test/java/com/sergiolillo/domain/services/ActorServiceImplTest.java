@@ -76,14 +76,12 @@ public class ActorServiceImplTest {
         Actor actor = new Actor(1, "JOHN", "DOE");
         FilmActor filmActor = new FilmActor();
         filmActor.setActor(actor);
-        actor.setFilmActors(Arrays.asList(filmActor));
         
         when(repoActor.findById(1)).thenReturn(Optional.of(actor));
 
         Optional<Actor> result = actorService.getOne(1);
         assertTrue(result.isPresent());
         assertEquals(actor, result.get());
-        assertFalse(result.get().getFilmActors().isEmpty());
         
         verify(repoActor, times(1)).findById(1);
     }
