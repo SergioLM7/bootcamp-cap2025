@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sergiolillo.domain.contracts.repositories.ActoresRepository;
 import com.sergiolillo.domain.contracts.services.ActoresService;
@@ -11,6 +12,8 @@ import com.sergiolillo.domain.entities.Actor;
 import com.sergiolillo.exceptions.DuplicateKeyException;
 import com.sergiolillo.exceptions.InvalidDataException;
 import com.sergiolillo.exceptions.NotFoundException;
+
+
 
 @Service
 public class ActoresServiceImpl implements ActoresService {
@@ -27,8 +30,12 @@ public class ActoresServiceImpl implements ActoresService {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public Optional<Actor> getOne(Integer id) {
-		return dao.findById(id);
+		Optional<Actor> actor = dao.findById(id);
+		actor.ifPresent(a -> a.getFilmActors().size());
+		
+		return actor;
 	}
 
 	@Override

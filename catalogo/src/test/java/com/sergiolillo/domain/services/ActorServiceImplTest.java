@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.sergiolillo.domain.contracts.repositories.ActoresRepository;
 import com.sergiolillo.domain.entities.Actor;
+import com.sergiolillo.domain.entities.FilmActor;
 import com.sergiolillo.exceptions.DuplicateKeyException;
 import com.sergiolillo.exceptions.InvalidDataException;
 import com.sergiolillo.exceptions.NotFoundException;
@@ -73,11 +74,16 @@ public class ActorServiceImplTest {
     @Test
     public void testGetOne() {
         Actor actor = new Actor(1, "JOHN", "DOE");
+        FilmActor filmActor = new FilmActor();
+        filmActor.setActor(actor);
+        actor.setFilmActors(Arrays.asList(filmActor));
+        
         when(repoActor.findById(1)).thenReturn(Optional.of(actor));
 
         Optional<Actor> result = actorService.getOne(1);
         assertTrue(result.isPresent());
         assertEquals(actor, result.get());
+        assertFalse(result.get().getFilmActors().isEmpty());
         
         verify(repoActor, times(1)).findById(1);
     }
