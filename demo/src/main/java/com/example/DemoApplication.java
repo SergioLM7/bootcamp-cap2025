@@ -61,8 +61,6 @@ public class DemoApplication implements CommandLineRunner {
 	@Transactional
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicación arrancada");
-		//ejemplosIOC();
-		//ejemplosDePruebas();
 		ejemplosDatos();
 	}
 	
@@ -92,8 +90,8 @@ public class DemoApplication implements CommandLineRunner {
 		//dao.findAll().forEach(o -> System.err.println(ActorDTO.from(o)));
 		//dao.queryByActorIdGreaterThan(200).forEach(System.err::println);
 //		dao.getByActorIdGreaterThan(200).forEach(o -> System.err.println(o.getId() + " " + o.getNombre()));
-		dao.findByActorIdGreaterThan(200).forEach(System.err::println);
-		dao.findByActorIdGreaterThan(200, ActorDTO.class).forEach(System.err::println);
+//		dao.findByActorIdGreaterThan(200).forEach(System.err::println);
+//		dao.findByActorIdGreaterThan(200, ActorDTO.class).forEach(System.err::println);
 		dao.findByActorIdGreaterThan(200, ActorShort.class).forEach(o -> System.err.println(o.getId() + " " + o.getNombre()));
 
 		
