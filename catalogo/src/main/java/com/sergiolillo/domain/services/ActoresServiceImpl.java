@@ -61,10 +61,10 @@ public class ActoresServiceImpl implements ActoresService {
 
 	@Override
 	public void delete(Actor item) throws InvalidDataException {
-		if(dao.findById(item.getActorId()) != null) {
-			dao.delete(item);
+		if(!dao.findById(item.getActorId()).isPresent() || item == null) {
+			throw new InvalidDataException("El actor no existe.");
 		}
-		throw new InvalidDataException("El actor no existe.");
+		dao.delete(item);
 	}
 
 	@Override
@@ -72,6 +72,8 @@ public class ActoresServiceImpl implements ActoresService {
 		if(!dao.findById(id).isPresent()) {
 			throw new NotFoundException("El actor no existe.");
 		}
+		
+		dao.deleteById(id);
 	}
 
 }
