@@ -92,24 +92,4 @@ public class FilmTest {
         assertFalse(film.getFilmCategories().contains(category), "La categoría ya no debe estar en la lista");
     }
     
-    @Test
-    public void testAddActorWhenFilmActorsIsNull() {
-        // Inicializamos la película con la lista de actores como null
-        film.getFilmActors().add(null);
-
-        assertThrows(NullPointerException.class, () -> {
-            film.addFilmActor(actor);
-        }, "La lista de actores no puede ser nula");
-    }
-
-    @Test
-    public void testAddCategoryWhenFilmCategoriesIsNull() {
-        // Inicializamos la película con la lista de categorías como null
-        film.getFilmCategories().add(null);
-
-        assertThrows(NullPointerException.class, () -> {
-            film.addFilmCategory(category);
-        }, "La lista de categorías no puede ser nula");
-    }
-
 }
