@@ -7,6 +7,7 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sergiolillo.domain.contracts.repositories.ActoresRepository;
 import com.sergiolillo.domain.contracts.repositories.CategoryRepository;
 import com.sergiolillo.domain.contracts.services.CategoryService;
 import com.sergiolillo.domain.entities.Category;
@@ -24,19 +25,15 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	@Transactional(readOnly=true)
 	public List<Category> getAll() {
-		List<Category> categories = dao.findAll();
-        categories.forEach(category -> Hibernate.initialize(category.getFilmCategories()));
-
-		return categories;
+		return dao.findAll();
 	}
 
 	@Override
 	@Transactional(readOnly=true)
 	public Optional<Category> getOne(Integer id) {
 		Optional<Category> category = dao.findById(id);
-        Hibernate.initialize(category.get().getFilmCategories());
+        category.ifPresent(c -> c.getFilmCategories().size());
 
 		return category;
 	}
@@ -56,14 +53,15 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category modify(Category item) throws NotFoundException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void delete(Category item) throws InvalidDataException {
-		// TODO Auto-generated method stub
+		if(item == null) {
+			throw new InvalidDataException("La categoría no puede ser nulo.");
+		}
 		
+		if(!dao.existsById(item.getCategoryId())) {
+			throw new NotFoundException("La categoría no existe.");
+		}
+		
+		return dao.save(item);
 	}
 
 	@Override
@@ -80,6 +78,21 @@ public class CategoryServiceImpl implements CategoryService {
 	    });
 
 	    dao.deleteById(id);
+	}
+
+	@Override
+	public void delete(Category item) throws InvalidDataException {
+		if(!dao.findById(item.getCategoryId()).isPresent() || item == null) {
+			throw new InvalidDataException("La categoría no existe.");
+		}
+		
+	    Category category = dao.findById(item.getCategoryId()).orElseThrow(() -> new InvalidDataException("La categoría no existe"));
+
+	    category.getFilmCategories().forEach(filmCategory -> {
+	        filmCategory.setCategory(null);
+	    });
+	    
+		dao.delete(item);
 	}
 
 }

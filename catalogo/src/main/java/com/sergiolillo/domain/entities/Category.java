@@ -50,10 +50,9 @@ public class Category implements Serializable {
 	public Category() {
 	}
 	
-	public Category(int categoryId, String name, List<FilmCategory> filmCategories) {
+	public Category(int categoryId, String name) {
 		this.categoryId = categoryId;
 	    this.name = name;
-	    this.filmCategories = filmCategories == null ? new ArrayList<>() : filmCategories;
 	    this.lastUpdate = new Timestamp(System.currentTimeMillis()); 
 	}
 
@@ -110,8 +109,7 @@ public class Category implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Category other = (Category) obj;
-		return categoryId == other.categoryId && Objects.equals(filmCategories, other.filmCategories)
-				&& Objects.equals(lastUpdate, other.lastUpdate) && Objects.equals(name, other.name);
+		return categoryId == other.categoryId && Objects.equals(lastUpdate, other.lastUpdate) && Objects.equals(name, other.name);
 	}
 	
 

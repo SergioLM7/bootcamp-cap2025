@@ -33,13 +33,12 @@ public class CategoryTest {
         "3, CIENCIA FICCIÓN"
     })
 	void testValidCreateCategory(int categoryId, String name) {
-    	Category category = new Category(categoryId, name, new ArrayList<FilmCategory>());
+    	Category category = new Category(categoryId, name);
     	
 		assertNotNull(category);
 		assertAll("Constructor de Category",
 				() -> 		assertEquals(categoryId, category.getCategoryId()),
 				() -> 		assertEquals(name, category.getName()),
-				() ->		assertNotNull(category.getFilmCategories()),
 				() -> 		assertNotNull(category.getLastUpdate())
 				);
 	}
@@ -51,15 +50,15 @@ public class CategoryTest {
         "-1, JOHN",
     })
     public void testInvalidCategories(int categoryId, String name) {
-    	Category category = new Category(categoryId, name, new ArrayList<FilmCategory>());
+    	Category category = new Category(categoryId, name);
         
-        assertTrue(categoryId <= 0 || name == null || name.isEmpty() || (name.length() > 45 && name.length() < 2) || category.getFilmCategories() == null);
+        assertTrue(categoryId <= 0 || name == null || name.isEmpty() || (name.length() > 45 && name.length() < 2));
     }
     
     @ParameterizedTest
     @ValueSource(strings = {"ESPAÑA", "ACCIÓN", "TERROR", "CIENCIA FICCIÓN"})
     public void testValidNames(String name) {
-    	Category category = new Category(1, name, new ArrayList<FilmCategory>());
+    	Category category = new Category(1, name);
         
         assertEquals(name, category.getName());
         
@@ -70,7 +69,7 @@ public class CategoryTest {
     @ParameterizedTest
     @ValueSource(strings = {" ", "españa", "12345", "Ciencia ficción"})
     public void testInvalidNames(String name) {
-        Category category = new Category(1, name, new ArrayList<FilmCategory>());
+        Category category = new Category(1, name);
         
         Set<ConstraintViolation<Category>> violations = validator.validate(category);
         assertFalse(violations.isEmpty());
