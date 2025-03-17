@@ -48,7 +48,7 @@ public class ActorServiceImplTest {
         assertEquals(actors.getFirst().getFirstName(), result.get(0).getFirstName());
         assertEquals(actors.getLast().getFirstName(), result.get(1).getFirstName());
 
-        verify(repoActor).findAll();
+        verify(repoActor, times(1)).findAll();
     }
     
     
@@ -58,6 +58,8 @@ public class ActorServiceImplTest {
 
         List<Actor> result = actorService.getAll();
         assertTrue(result.isEmpty());
+        
+        verify(repoActor, times(1)).findAll();
     }
 
     @Test
@@ -76,6 +78,8 @@ public class ActorServiceImplTest {
         Optional<Actor> result = actorService.getOne(1);
         assertTrue(result.isPresent());
         assertEquals(actor, result.get());
+        
+        verify(repoActor, times(1)).findById(1);
     }
 
     @Test
@@ -85,6 +89,9 @@ public class ActorServiceImplTest {
 
         Actor result = actorService.add(actor);
         assertEquals(actor, result);
+        
+        verify(repoActor, times(1)).save(actor);
+
     }
 
     @Test
@@ -93,6 +100,8 @@ public class ActorServiceImplTest {
         when(repoActor.existsById(1)).thenReturn(true);
 
         assertThrows(DuplicateKeyException.class, () -> actorService.add(actor));
+        
+        verify(repoActor, times(0)).save(actor);
     }
 
     @Test
@@ -103,6 +112,8 @@ public class ActorServiceImplTest {
 
         Actor result = actorService.modify(actor);
         assertEquals(actor, result);
+        
+        verify(repoActor, times(1)).save(actor);
     }
 
     @Test
@@ -111,6 +122,8 @@ public class ActorServiceImplTest {
         when(repoActor.existsById(1)).thenReturn(false);
 
         assertThrows(NotFoundException.class, () -> actorService.modify(actor));
+        
+        verify(repoActor, times(0)).save(actor);
     }
 
     @Test
@@ -128,6 +141,8 @@ public class ActorServiceImplTest {
         when(repoActor.findById(1)).thenReturn(Optional.empty());
 
         assertThrows(InvalidDataException.class, () -> actorService.delete(actor));
+        
+        verify(repoActor, times(0)).delete(actor);
     }
 
     @Test
@@ -143,6 +158,8 @@ public class ActorServiceImplTest {
         when(repoActor.findById(1)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> actorService.deleteById(1));
+        
+        verify(repoActor, times(0)).deleteById(1);
     }
 	
 
