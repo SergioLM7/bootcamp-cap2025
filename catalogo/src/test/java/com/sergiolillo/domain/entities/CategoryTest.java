@@ -46,13 +46,15 @@ public class CategoryTest {
     
     @ParameterizedTest
     @CsvSource({
-        "0, ",
-        "-1, JOHN",
+        "1, ",
+        "-1, ROMÁNTICA",
+        "1, S",
+        "10, ROMÁNTICASROMÁNTICASROMÁNTICASROMÁNTICASROMÁNTICAS"
     })
     public void testInvalidCategories(int categoryId, String name) {
     	Category category = new Category(categoryId, name);
         
-        assertTrue(categoryId <= 0 || name == null || name.isEmpty() || (name.length() > 45 && name.length() < 2));
+        assertTrue(categoryId <= 0 || name == null || name.isEmpty() || name.length() > 45 || name.length() < 2);
     }
     
     @ParameterizedTest
@@ -67,7 +69,7 @@ public class CategoryTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {" ", "españa", "12345", "Ciencia ficción"})
+    @ValueSource(strings = {"", "españa", "12345", "Ciencia ficción"})
     public void testInvalidNames(String name) {
         Category category = new Category(1, name);
         

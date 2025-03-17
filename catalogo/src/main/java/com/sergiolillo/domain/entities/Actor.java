@@ -46,7 +46,7 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to FilmActor
-	@OneToMany(mappedBy="actor", fetch= FetchType.LAZY)
+	@OneToMany(mappedBy="actor", fetch= FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FilmActor> filmActors;
 
 	public Actor() {

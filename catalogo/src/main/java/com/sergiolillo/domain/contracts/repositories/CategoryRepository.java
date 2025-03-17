@@ -19,11 +19,4 @@ public interface CategoryRepository extends JpaRepository<Category, Integer>, Jp
 	@Query(value="SELECT c FROM Category c JOIN FETCH c.filmCategories ORDER BY c.lastUpdate DESC")
 	List<Category> findNovedades();
 	
-	//Pide la instancia en base a una propiedad de la instancia
-//	@Query(value="SELECT a FROM Actor a WHERE a.actorId > ?1")
-//	List<Category> findNovedadesJPQL (int id);
-	
-	//Pide la fila en base a una columna de la tabla
-//	@Query(value="SELECT * FROM actor WHERE actor_id > :id", nativeQuery=true)
-//	List<Category> findNovedadesSQL (int id);
 }

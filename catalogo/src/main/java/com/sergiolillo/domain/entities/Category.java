@@ -43,7 +43,7 @@ public class Category implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to FilmCategory
-	@OneToMany(mappedBy="category")
+	@OneToMany(mappedBy="category", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
 	private List<FilmCategory> filmCategories;
 
