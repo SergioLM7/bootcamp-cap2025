@@ -80,6 +80,7 @@ public class PersonasJobConfiguration {
 				.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
 				.sql("INSERT INTO personas VALUES (:id,:nombre,:correo,:ip)").dataSource(dataSource).build();
 	}
+
 //
 //	Step importCSV2DBStep(int index, String file, JdbcBatchItemWriter<Persona> toDB) {
 //		return new StepBuilder("importCSV2DBStep" + index, jobRepository)
@@ -106,11 +107,10 @@ public class PersonasJobConfiguration {
 	@Bean
 	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
 		return new JdbcCursorItemReaderBuilder<Persona>().name("personaDBItemReader")
-				.sql("SELECT id, nombre, correo, ip FROM personas")
-				.dataSource(dataSource)
-				.rowMapper(new BeanPropertyRowMapper<>(Persona.class))
-				.build();
+				.sql("SELECT id, nombre, correo, ip FROM personas").dataSource(dataSource)
+				.rowMapper(new BeanPropertyRowMapper<>(Persona.class)).build();
 	}
+
 //
 	@Bean
 	public FlatFileItemWriter<Persona> personaCSVItemWriter() {
@@ -127,15 +127,13 @@ public class PersonasJobConfiguration {
 					}
 				}).build();
 	}
+
 //	
-	@Bean 
-	public Step exportDB2CSVStep(JdbcCursorItemReader<Persona> personaDBItemReader) {  
-		return new StepBuilder("exportDB2CSVStep", jobRepository)    
-				.<Persona, Persona>chunk(100, transactionManager)    
-				.reader(personaDBItemReader)    
-				.writer(personaCSVItemWriter())    
-				.build(); 
-	} 
+	@Bean
+	public Step exportDB2CSVStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
+		return new StepBuilder("exportDB2CSVStep", jobRepository).<Persona, Persona>chunk(100, transactionManager)
+				.reader(personaDBItemReader).writer(personaCSVItemWriter()).build();
+	}
 //	
 //	
 //	//Segundo personasJob que ya exporta también todo lo que lee en la BBDD a un CSV nuevo (en la carpeta output)
@@ -188,21 +186,39 @@ public class PersonasJobConfiguration {
 	@Bean
 	public Step exportDB2XMLStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
 		return new StepBuilder("exportDB2XMLStep", jobRepository).<Persona, Persona>chunk(100, transactionManager)
-				.reader(personaDBItemReader)
-				.writer(personaXMLItemWriter())
-				.build();
+				.reader(personaDBItemReader).writer(personaXMLItemWriter()).build();
 	}
-	
-	// Cuarto personasJob que gestiona el paso de datos de la DB a XML (creando un archivo outputData.xml en la carpeta output)
+
+	// Cuarto personasJob que gestiona el paso de datos de la DB a XML (creando un
+	// archivo outputData.xml en la carpeta output)
+//	Comentado para ejecutar el FTPLoadTasklet
+	// @Bean
+//	public Job personasJob(PersonasJobListener listener, Step importXML2DBStep1,Step exportDB2XMLStep, Step exportDB2CSVStep) {
+//		return new JobBuilder("personasJob", jobRepository)
+//				.incrementer(new RunIdIncrementer())
+//				.listener(listener)
+//				.start(importXML2DBStep1)
+//				.next(exportDB2XMLStep)
+//				.next(exportDB2CSVStep)
+//				.build();
+//	}
+
 	@Bean
-	public Job personasJob(PersonasJobListener listener, Step importXML2DBStep1,Step exportDB2XMLStep, Step exportDB2CSVStep) {
-		return new JobBuilder("personasJob", jobRepository)
-				.incrementer(new RunIdIncrementer())
-				.listener(listener)
-				.start(importXML2DBStep1)
-				.next(exportDB2XMLStep)
-				.next(exportDB2CSVStep)
-				.build();
+	public FTPLoadTasklet ftpLoadTasklet(@Value("${input.dir.name:./ftp}") String dir) {
+		FTPLoadTasklet tasklet = new FTPLoadTasklet();
+		tasklet.setDirectoryResource(new FileSystemResource(dir));
+		return tasklet;
+	}
+
+	@Bean
+	public Step copyFilesInDir(FTPLoadTasklet ftpLoadTasklet) {
+		return new StepBuilder("copyFilesInDir", jobRepository).tasklet(ftpLoadTasklet, transactionManager).build();
+	}
+
+	@Bean
+	public Job personasJob(PersonasJobListener listener, Step copyFilesInDir) {
+		return new JobBuilder("personasJob", jobRepository).incrementer(new RunIdIncrementer()).listener(listener)
+				.start(copyFilesInDir).build();
 	}
 
 }
