@@ -112,30 +112,30 @@ public class PersonasJobConfiguration {
 				.build();
 	}
 //
-//	@Bean
-//	public FlatFileItemWriter<Persona> personaCSVItemWriter() {
-//		return new FlatFileItemWriterBuilder<Persona>().name("personaCSVItemWriter")
-//				.resource(new FileSystemResource("output/outputData.csv"))
-//				.lineAggregator(new DelimitedLineAggregator<Persona>() {
-//					{// anonymous class constructor
-//						setDelimiter(",");
-//						setFieldExtractor(new BeanWrapperFieldExtractor<Persona>() {
-//							{// anonymous class constructor
-//								setNames(new String[] { "id", "nombre", "correo", "ip" });
-//							}
-//						});
-//					}
-//				}).build();
-//	}
+	@Bean
+	public FlatFileItemWriter<Persona> personaCSVItemWriter() {
+		return new FlatFileItemWriterBuilder<Persona>().name("personaCSVItemWriter")
+				.resource(new FileSystemResource("output/outputData.csv"))
+				.lineAggregator(new DelimitedLineAggregator<Persona>() {
+					{// anonymous class constructor
+						setDelimiter(",");
+						setFieldExtractor(new BeanWrapperFieldExtractor<Persona>() {
+							{// anonymous class constructor
+								setNames(new String[] { "id", "nombre", "correo", "ip" });
+							}
+						});
+					}
+				}).build();
+	}
 //	
-//	@Bean 
-//	public Step exportDB2CSVStep(JdbcCursorItemReader<Persona> personaDBItemReader) {  
-//		return new StepBuilder("exportDB2CSVStep", jobRepository)    
-//				.<Persona, Persona>chunk(100, transactionManager)    
-//				.reader(personaDBItemReader)    
-//				.writer(personaCSVItemWriter())    
-//				.build(); 
-//	} 
+	@Bean 
+	public Step exportDB2CSVStep(JdbcCursorItemReader<Persona> personaDBItemReader) {  
+		return new StepBuilder("exportDB2CSVStep", jobRepository)    
+				.<Persona, Persona>chunk(100, transactionManager)    
+				.reader(personaDBItemReader)    
+				.writer(personaCSVItemWriter())    
+				.build(); 
+	} 
 //	
 //	
 //	//Segundo personasJob que ya exporta también todo lo que lee en la BBDD a un CSV nuevo (en la carpeta output)
@@ -195,12 +195,13 @@ public class PersonasJobConfiguration {
 	
 	// Cuarto personasJob que gestiona el paso de datos de la DB a XML (creando un archivo outputData.xml en la carpeta output)
 	@Bean
-	public Job personasJob(PersonasJobListener listener, Step importXML2DBStep1,Step exportDB2XMLStep) {
+	public Job personasJob(PersonasJobListener listener, Step importXML2DBStep1,Step exportDB2XMLStep, Step exportDB2CSVStep) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
 				.listener(listener)
 				.start(importXML2DBStep1)
 				.next(exportDB2XMLStep)
+				.next(exportDB2CSVStep)
 				.build();
 	}
 
