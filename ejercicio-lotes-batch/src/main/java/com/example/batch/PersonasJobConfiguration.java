@@ -168,9 +168,10 @@ public class PersonasJobConfiguration {
 
 	//Tercer personasJob que gestiona el paso de datos de un archivo XML a DB
 	@Bean
-	public Job personasJob(Step importXML2DBStep1) {
+	public Job personasJob(PersonasJobListener listener, Step importXML2DBStep1) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
+				.listener(listener)
 				.start(importXML2DBStep1)
 				.build();
 	}
