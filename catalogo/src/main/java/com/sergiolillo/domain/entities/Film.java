@@ -2,10 +2,7 @@ package com.sergiolillo.domain.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -23,6 +20,58 @@ import java.util.Objects;
 @NamedQuery(name="Film.findAll", query="SELECT f FROM Film f")
 public class Film implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static enum Rating {
+		GENERAL_AUDIENCES("G"), 
+		PARENTAL_GUIDANCE_SUGGESTED("PG"), 
+		PARENTS_STRONGLY_CAUTIONED("PG-13"), 
+		RESTRICTED("R"),
+		ADULTS_ONLY("NC-17");
+
+		String value;
+
+		Rating(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return this.value;
+		}
+		
+		public static Rating getEnum(String value) {
+			switch (value) {
+			case "G":
+				return Rating.GENERAL_AUDIENCES;
+			case "PG":
+				return Rating.PARENTAL_GUIDANCE_SUGGESTED;
+			case "PG-13":
+				return Rating.PARENTS_STRONGLY_CAUTIONED;
+			case "R":
+				return Rating.RESTRICTED;
+			case "NC-17":
+				return Rating.ADULTS_ONLY;
+			case "":
+				return null;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + value);
+			}
+		}
+
+		public static final String[] VALUES = { "G", "PG", "PG-13", "R", "NC-17" };
+	}
+	
+	@Converter
+	private static class RatingConverter implements AttributeConverter<Rating, String> {
+		@Override
+		public String convertToDatabaseColumn(Rating rating) {
+			return rating == null ? null : rating.getValue();
+		}
+
+		@Override
+		public Rating convertToEntityAttribute(String value) {
+			return value == null ? null : Rating.getEnum(value);
+		}
+	}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -35,29 +84,31 @@ public class Film implements Serializable {
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	private Timestamp lastUpdate;
 	
-	@Min(1)
+	@Positive
 	private int length;
 
-	@Column(length=1)
-	private String rating;
+	@Convert(converter = RatingConverter.class)
+	private Rating rating;
 
 	@Column(name="release_year")
 	@Min(1900)
+	@Max(2155)
 	private Short releaseYear;
 
 	@Column(name="rental_duration", nullable=false)
 	@NotNull(message="La rentalDuration no puede ser nula")
-	@Min(1)
+	@Positive
+	@DecimalMin(value = "0.0", inclusive = false, message="El rentalDuration no puede ser negativo ni 0.0")
 	private byte rentalDuration;
 
 	@Column(name="rental_rate", nullable=false, precision=10, scale=2)
 	@NotNull(message="El rentalRate no puede ser nulo")
-	@Min(1)
+	@Positive
 	private BigDecimal rentalRate;
 
 	@Column(name="replacement_cost", nullable=false, precision=10, scale=2)
 	@NotNull(message="El replacementCost no puede ser nulo")
-	@Min(1)
+	@DecimalMin(value = "0.0", inclusive = false, message="El replacementCost no puede ser negativo ni 0.0")
 	private BigDecimal replacementCost;
 
 	@Column(nullable=false, length=128)
@@ -68,6 +119,7 @@ public class Film implements Serializable {
 	//bi-directional many-to-one association to Language
 	@ManyToOne
 	@JoinColumn(name="language_id", nullable=false)
+	@NotNull
 	private Language language;
 
 	//bi-directional many-to-one association to Language
@@ -79,36 +131,55 @@ public class Film implements Serializable {
 	//Cuando se guarde la película, si hay cambios en el filmActor, también los aplicará
 	//El orphanRemoval le dice que si va a borrar la película, primero borre las relaciones
 	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<FilmActor> filmActors;
+	private List<FilmActor> filmActors = new ArrayList<FilmActor>();
 
 	//bi-directional many-to-one association to FilmCategory
 	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<FilmCategory> filmCategories;
+	private List<FilmCategory> filmCategories = new ArrayList<FilmCategory>();
 
 	public Film() {
 	}
 	
+	public Film(int filmId) {
+		this.filmId = filmId;
+	}
 	
-
-	public Film(int filmId, String description, int length, String rating, Short releaseYear,
-			byte rentalDuration, BigDecimal rentalRate, BigDecimal replacementCost, String title,
-			Language language) {
+	public Film(int filmId, @NotBlank @Size(max=128, min=2) String title, @NotNull Language language,
+			@NotNull @Positive byte rentalDuration,
+			@NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal rentalRate,
+			@NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal replacementCost) {
 		super();
 		this.filmId = filmId;
-		this.description = description;
-		this.lastUpdate = new Timestamp(System.currentTimeMillis());
-		this.length = length;
-		this.rating = rating;
-		this.releaseYear = releaseYear;
+		this.title = title;
+		this.language = language;
 		this.rentalDuration = rentalDuration;
 		this.rentalRate = rentalRate;
 		this.replacementCost = replacementCost;
-		this.title = title;
-		this.language = language;
-	    this.filmActors = new ArrayList<>();
-	    this.filmCategories = new ArrayList<>();
 	}
 
+	public Film(int filmId, @NotBlank  @Size(max=128, min=2 )String title, String description, @Min(1900) @Max(2155) Short releaseYear,
+			@NotNull Language language, Language languageVO, @Positive byte rentalDuration,
+			@Positive @DecimalMin(value = "0.0", inclusive = false) BigDecimal rentalRate,
+			@Positive Integer length,
+			@DecimalMin(value = "0.0", inclusive = false)BigDecimal replacementCost,
+			Rating rating) {
+		super();
+		this.filmId = filmId;
+		this.title = title;
+		this.description = description;
+		this.releaseYear = releaseYear;
+		this.language = language;
+		this.languageVO = languageVO;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.length = length;
+		this.replacementCost = replacementCost;
+		this.rating = rating;
+	}
+
+
+
+	// TODO : ENUM de rating
 
 
 	public int getFilmId() {
@@ -143,11 +214,11 @@ public class Film implements Serializable {
 		this.length = length;
 	}
 
-	public String getRating() {
+	public Rating getRating() {
 		return this.rating;
 	}
 
-	public void setRating(String rating) {
+	public void setRating(Rating rating) {
 		this.rating = rating;
 	}
 
@@ -207,71 +278,140 @@ public class Film implements Serializable {
 		this.languageVO = languageVO;
 	}
 
-	public List<FilmActor> getFilmActors() {
-		return this.filmActors;
+	// GESTION DE ACTORES 
+	
+	public List<Actor> getActors() {
+		return this.filmActors.stream().map(item -> item.getActor()).toList();
+	}
+	
+	public void setActors(List<Actor> source) {
+		if(filmActors == null || filmActors.isEmpty()) {
+			clearActors();
+			source.forEach(item -> addActor(item));
+		}
+	}
+	
+	public void clearActors() {
+		filmActors = new ArrayList<FilmActor>();
+	}
+	
+	public void addActor(Actor actor) {
+		FilmActor filmActor = new FilmActor (this, actor);
+		filmActors.add(filmActor);
+	}
+	
+	public void removeActor(Actor actor) {
+		var filmActor = filmActors.stream().filter(item -> item.getActor().equals(actor)).findFirst();
+		
+		if (filmActor.isEmpty())
+			return;
+		
+		filmActors.remove(filmActor.get());
+	}
+	
+	public void removeActor(int actorId) {
+		removeActor(new Actor(actorId));
+	}
+	
+	// Gestión de categorias
+
+	public List<Category> getCategories() {
+		return this.filmCategories.stream().map(item -> item.getCategory()).toList();
+	}
+	
+	public void setCategories(List<Category> source) {
+		if (filmCategories == null || !filmCategories.isEmpty())
+			clearCategories();
+		source.forEach(item -> addCategory(item));
+	}
+	
+	public void clearCategories() {
+		filmCategories = new ArrayList<FilmCategory>();
 	}
 
-	public FilmActor addFilmActor(FilmActor filmActor) {
-		getFilmActors().add(filmActor);
-		filmActor.setFilm(this);
-
-		return filmActor;
+	public void addCategory(Category item) {
+		FilmCategory filmCategory = new FilmCategory(this, item);
+		filmCategories.add(filmCategory);
+	}
+	
+	public void addCategory(int id) {
+		addCategory(new Category(id));
+	}
+	
+	public void removeCategory(Category ele) {
+		var filmCategory = filmCategories.stream().filter(item -> item.getCategory().equals(ele)).findFirst();
+		if (filmCategory.isEmpty())
+			return;
+		filmCategories.remove(filmCategory.get());
 	}
 
-	public FilmActor removeFilmActor(FilmActor filmActor) {
-		getFilmActors().remove(filmActor);
-		filmActor.setFilm(null);
-
-		return filmActor;
+	public void removeCategory(int id) {
+		removeCategory(new Category(id));
 	}
 
-	public List<FilmCategory> getFilmCategories() {
-		return this.filmCategories;
-	}
-
-	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().add(filmCategory);
-		filmCategory.setFilm(this);
-
-		return filmCategory;
-	}
-
-	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().remove(filmCategory);
-		filmCategory.setFilm(null);
-
-		return filmCategory;
-	}
 
 	@Override
 	public String toString() {
-		return "Film [filmId=" + filmId + ", description=" + description + ", releaseYear=" + releaseYear + ", title="
-				+ title + ", language=" + language + "]";
+		return "Film [filmId=" + filmId + ", description=" + description + ", lastUpdate=" + lastUpdate + ", length="
+				+ length + ", rating=" + rating + ", releaseYear=" + releaseYear + ", rentalDuration=" + rentalDuration
+				+ ", rentalRate=" + rentalRate + ", replacementCost=" + replacementCost + ", title=" + title
+				+ ", language=" + language + ", languageVO=" + languageVO + "]";
 	}
+
+
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, filmId, lastUpdate, length, rating, releaseYear, rentalDuration, rentalRate,
-				replacementCost, title);
+		return Objects.hash(filmId);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (obj instanceof Film o)
+			return filmId == o.filmId;
+		else
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Film other = (Film) obj;
-		return Objects.equals(description, other.description) && filmId == other.filmId
-				&& Objects.equals(lastUpdate, other.lastUpdate) && length == other.length
-				&& Objects.equals(rating, other.rating) && Objects.equals(releaseYear, other.releaseYear)
-				&& rentalDuration == other.rentalDuration && Objects.equals(rentalRate, other.rentalRate)
-				&& Objects.equals(replacementCost, other.replacementCost) && Objects.equals(title, other.title);
 	}
 	
+	public Film merge(Film target) {
+//		BeanUtils.copyProperties(this, target, "filmId" , "filmActors", "filmCategories");
+		target.title = title;
+		target.description = description;
+		target.releaseYear = releaseYear;
+		target.language = language;
+		target.languageVO = languageVO;
+		target.rentalDuration = rentalDuration;
+		target.rentalRate = rentalRate;
+		target.length = length;
+		target.replacementCost = replacementCost;
+		target.rating = rating;
+		// Borra los actores que sobran
+		target.getActors().stream().filter(item -> !getActors().contains(item))
+				.forEach(item -> target.removeActor(item));
+		// Añade los actores que faltan
+		getActors().stream().filter(item -> !target.getActors().contains(item)).forEach(item -> target.addActor(item));
+		// Borra las categorias que sobran
+		target.getCategories().stream().filter(item -> !getCategories().contains(item))
+				.forEach(item -> target.removeCategory(item));
+		// Añade las categorias que faltan
+		getCategories().stream().filter(item -> !target.getCategories().contains(item))
+				.forEach(item -> target.addCategory(item));
+		
+		// Bug de Hibernate
+		target.filmActors.forEach(o -> o.prePersiste());
+		target.filmCategories.forEach(o -> o.prePersiste());
+		
+		return target;
+	}
 	
-	
-
-}
+	// Bug de Hibernate
+	@PostPersist
+	@PostUpdate
+	public void prePersiste() {
+		System.err.println("prePersiste(): Bug Hibernate");
+		filmActors.forEach(o -> o.prePersiste());
+		filmCategories.forEach(o -> o.prePersiste());
+	}
+ }

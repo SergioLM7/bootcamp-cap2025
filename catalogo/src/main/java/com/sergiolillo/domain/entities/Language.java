@@ -10,6 +10,9 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.sergiolillo.domain.core.entities.AbstractEntity;
 
 
@@ -22,6 +25,9 @@ import com.sergiolillo.domain.core.entities.AbstractEntity;
 @NamedQuery(name="Language.findAll", query="SELECT l FROM Language l")
 public class Language extends AbstractEntity<Language> implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+    public static class Partial {}
+    public static class Complete extends Partial {}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -29,6 +35,9 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	private int languageId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@JsonView(Language.Complete.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+	@JsonProperty("ultimaModificacion")
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=20)
@@ -50,10 +59,12 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	
 	
 
-	public Language(int languageId, String name) {
-		super();
+	public Language(int languageId) {
 		this.languageId = languageId;
-	    this.lastUpdate = new Timestamp(System.currentTimeMillis()); 
+	}
+
+	public Language(int languageId, @NotBlank @Size(max = 20, min=2) @Pattern(regexp="^[A-ZÀ-Ö ]+$")String name) {
+		this.languageId = languageId;
 		this.name = name;
 	}
 
@@ -91,15 +102,51 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	public void setFilms(List<Film> films) {
 		this.films = films;
 	}
+	
+	public Film addFilm(Film film) {
+		getFilms().add(film);
+		film.setLanguage(this);
+
+		return film;
+	}
+
+	public Film removeFilm(Film film) {
+		getFilms().remove(film);
+		film.setLanguage(null);
+
+		return film;
+	}
+
+	public List<Film> getFilmsVO() {
+		return this.filmsVO;
+	}
+
+	public void setFilmsVO(List<Film> filmsVO) {
+		this.filmsVO = filmsVO;
+	}
+
+	public Film addFilmsVO(Film filmsVO) {
+		getFilmsVO().add(filmsVO);
+		filmsVO.setLanguageVO(this);
+
+		return filmsVO;
+	}
+
+	public Film removeFilmsVO(Film filmsVO) {
+		getFilmsVO().remove(filmsVO);
+		filmsVO.setLanguageVO(null);
+
+		return filmsVO;
+	}
 
 	@Override
 	public String toString() {
-		return "Language [name=" + name + "]";
+		return "Language [languageId=" + languageId + ", name=" + name + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(languageId, lastUpdate, name);
+		return Objects.hash(languageId);
 	}
 
 	@Override

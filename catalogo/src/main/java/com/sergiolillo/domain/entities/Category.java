@@ -50,10 +50,13 @@ public class Category implements Serializable {
 	public Category() {
 	}
 	
-	public Category(int categoryId, String name) {
+	public Category(int categoryId) {
 		this.categoryId = categoryId;
-	    this.name = name;
-	    this.lastUpdate = new Timestamp(System.currentTimeMillis()); 
+	}
+
+	public Category(int categoryId, @NotBlank @Size(max=45, min=2) @Pattern(regexp="^[A-ZÀ-Ö ]+$") String name) {
+		this.categoryId = categoryId;
+		this.name = name;
 	}
 
 
@@ -88,6 +91,20 @@ public class Category implements Serializable {
 	public void setFilmCategories(List<FilmCategory> filmCategories) {
 		this.filmCategories = filmCategories;
 	}
+	
+	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
+		getFilmCategories().add(filmCategory);
+		filmCategory.setCategory(this);
+
+		return filmCategory;
+	}
+
+	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
+		getFilmCategories().remove(filmCategory);
+		filmCategory.setCategory(null);
+
+		return filmCategory;
+	}
 
 	@Override
 	public String toString() {
@@ -97,19 +114,17 @@ public class Category implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(categoryId, filmCategories, lastUpdate, name);
+		return Objects.hash(categoryId);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (obj instanceof Category o)
+			return categoryId == o.categoryId;
+		else
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Category other = (Category) obj;
-		return categoryId == other.categoryId && Objects.equals(lastUpdate, other.lastUpdate) && Objects.equals(name, other.name);
 	}
 	
 

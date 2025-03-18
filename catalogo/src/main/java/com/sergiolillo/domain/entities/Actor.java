@@ -8,9 +8,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sergiolillo.domain.core.entities.AbstractEntity;
 
 
@@ -69,6 +71,7 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 	}
 
 	public void setActorId(int actorId) {
+		if (this.actorId == actorId) return;
 		this.actorId = actorId;
 	}
 
@@ -77,6 +80,7 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 	}
 
 	public void setFirstName(String firstName) {
+		if (this.firstName == firstName) return;
 		this.firstName = firstName;
 	}
 
@@ -85,6 +89,7 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 	}
 
 	public void setLastName(String lastName) {
+		if (this.lastName == lastName) return;
 		this.lastName = lastName;
 	}
 
@@ -94,6 +99,28 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 
 	public void setLastUpdate(Timestamp lastUpdate) {
 		this.lastUpdate = lastUpdate;
+	}
+	
+	public List<FilmActor> getFilmActors() {
+		return this.filmActors;
+	}
+
+	public void setFilmActors(List<FilmActor> filmActors) {
+		this.filmActors = filmActors;
+	}
+
+	public FilmActor addFilmActor(FilmActor filmActor) {
+		getFilmActors().add(filmActor);
+		filmActor.setActor(this);
+
+		return filmActor;
+	}
+
+	public FilmActor removeFilmActor(FilmActor filmActor) {
+		getFilmActors().remove(filmActor);
+		filmActor.setActor(null);
+
+		return filmActor;
 	}
 
 	@Override
@@ -115,8 +142,10 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Actor [actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return "Actor [actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + ", lastUpdate="
+				+ lastUpdate + "]";
 	}
+	
 	
 	//Si tuviésemos propiedades para hacer esto...
 	public void jubilate() {
