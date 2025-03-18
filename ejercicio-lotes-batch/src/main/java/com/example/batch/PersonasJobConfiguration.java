@@ -26,7 +26,9 @@ import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.xml.StaxEventItemReader;
+import org.springframework.batch.item.xml.StaxEventItemWriter;
 import org.springframework.batch.item.xml.builder.StaxEventItemReaderBuilder;
+import org.springframework.batch.item.xml.builder.StaxEventItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
@@ -101,14 +103,14 @@ public class PersonasJobConfiguration {
 //
 //	// De DB a CSV (ya con el filtro de quitar hombres-pares que hace el ItemProcessor)
 //
-//	@Bean
-//	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
-//		return new JdbcCursorItemReaderBuilder<Persona>().name("personaDBItemReader")
-//				.sql("SELECT id, nombre, correo, ip FROM personas")
-//				.dataSource(dataSource)
-//				.rowMapper(new BeanPropertyRowMapper<>(Persona.class))
-//				.build();
-//	}
+	@Bean
+	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
+		return new JdbcCursorItemReaderBuilder<Persona>().name("personaDBItemReader")
+				.sql("SELECT id, nombre, correo, ip FROM personas")
+				.dataSource(dataSource)
+				.rowMapper(new BeanPropertyRowMapper<>(Persona.class))
+				.build();
+	}
 //
 //	@Bean
 //	public FlatFileItemWriter<Persona> personaCSVItemWriter() {
@@ -166,13 +168,39 @@ public class PersonasJobConfiguration {
 				.reader(personaXMLItemReader()).processor(personaItemProcessor).writer(personaDBItemWriter).build();
 	}
 
-	//Tercer personasJob que gestiona el paso de datos de un archivo XML a DB
+//	// Tercer personasJob que gestiona el paso de datos de un archivo XML a DB
+//	@Bean
+//	public Job personasJob(PersonasJobListener listener, Step importXML2DBStep1) {
+//		return new JobBuilder("personasJob", jobRepository).incrementer(new RunIdIncrementer()).listener(listener)
+//				.start(importXML2DBStep1).build();
+//	}
+
+	public StaxEventItemWriter<Persona> personaXMLItemWriter() {
+		XStreamMarshaller marshaller = new XStreamMarshaller();
+		Map<String, Class> aliases = new HashMap<>();
+		aliases.put("Persona", Persona.class);
+		marshaller.setAliases(aliases);
+		return new StaxEventItemWriterBuilder<Persona>().name("personaXMLItemWriter")
+				.resource(new FileSystemResource("output/outputData.xml")).marshaller(marshaller)
+				.rootTagName("Personas").overwriteOutput(true).build();
+	}
+
 	@Bean
-	public Job personasJob(PersonasJobListener listener, Step importXML2DBStep1) {
+	public Step exportDB2XMLStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
+		return new StepBuilder("exportDB2XMLStep", jobRepository).<Persona, Persona>chunk(100, transactionManager)
+				.reader(personaDBItemReader)
+				.writer(personaXMLItemWriter())
+				.build();
+	}
+	
+	// Cuarto personasJob que gestiona el paso de datos de la DB a XML (creando un archivo outputData.xml en la carpeta output)
+	@Bean
+	public Job personasJob(PersonasJobListener listener, Step importXML2DBStep1,Step exportDB2XMLStep) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
 				.listener(listener)
 				.start(importXML2DBStep1)
+				.next(exportDB2XMLStep)
 				.build();
 	}
 
