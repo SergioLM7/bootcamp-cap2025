@@ -105,7 +105,8 @@ public class PersonasJobConfiguration {
 ////				.build(); 
 ////	}
 //	
-//
+
+
 //	// De DB a CSV (ya con el filtro de quitar hombres-pares que hace el ItemProcessor)
 //
 	@Bean
@@ -151,6 +152,8 @@ public class PersonasJobConfiguration {
 //				.build(); 
 //	}
 
+	//DE XML A DB
+
 	// De XML a DB (ya con el filtro de quitar hombres-pares que hace el
 	// ItemProcessor)
 	public StaxEventItemReader<PersonaDTO> personaXMLItemReader() {
@@ -177,6 +180,7 @@ public class PersonasJobConfiguration {
 //				.start(importXML2DBStep1).build();
 //	}
 
+	//DE DB A XML
 	public StaxEventItemWriter<Persona> personaXMLItemWriter() {
 		XStreamMarshaller marshaller = new XStreamMarshaller();
 		Map<String, Class> aliases = new HashMap<>();
@@ -207,6 +211,7 @@ public class PersonasJobConfiguration {
 //				.build();
 //	}
 
+	//TASKLET
 	@Bean
 	public FTPLoadTasklet ftpLoadTasklet(@Value("${input.dir.name:./ftp}") String dir) {
 		FTPLoadTasklet tasklet = new FTPLoadTasklet();
@@ -227,6 +232,8 @@ public class PersonasJobConfiguration {
 //				.start(copyFilesInDir).build();
 //	}
 
+	
+	//INPUTSTREAM
 	@Autowired
 	private PhotoRestItemReader photoRestItemReader;
 
@@ -254,9 +261,9 @@ public class PersonasJobConfiguration {
 				.build();
 	}
 	
-	//Sexto personasJob para conectar con otro microservicio, obtener sus datos y volcarlos en un CSV en nuestro folder output
+	//Sexto Job para conectar con otro microservicio, obtener sus datos y volcarlos en un CSV en nuestro folder output
 	@Bean
-	public Job personasJob(PersonasJobListener listener, Step photoStep) {
+	public Job photoJob(PersonasJobListener listener, Step photoStep) {
 		return new JobBuilder("personasJob", jobRepository).incrementer(new RunIdIncrementer()).listener(listener)
 				.start(photoStep).build();
 	}
