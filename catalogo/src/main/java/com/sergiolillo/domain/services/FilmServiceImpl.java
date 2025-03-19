@@ -4,6 +4,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.sergiolillo.domain.contracts.repositories.FilmRepository;
@@ -25,6 +29,31 @@ public class FilmServiceImpl implements FilmService {
 		this.repoFilm = repoFilm;
 	}
 	
+	@Override
+	public <T> List<T> getByProjection(@NonNull Class<T> type) {
+		return repoFilm.findAllBy(type);
+	}
+
+	@Override
+	public <T> List<T> getByProjection(@NonNull Sort sort, @NonNull Class<T> type) {
+		return repoFilm.findAllBy(sort, type);
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(@NonNull Pageable pageable, @NonNull Class<T> type) {
+		return repoFilm.findAllBy(pageable, type);
+	}
+	
+
+	@Override
+	public List<Film> getAll(@NonNull Sort sort) {
+		return repoFilm.findAll(sort);
+	}
+	
+	@Override
+	public Page<Film> getAll(@NonNull Pageable pageable) {
+		return repoFilm.findAll(pageable);
+	}
 
 	@Override
 	public List<Film> getAll() {
@@ -33,9 +62,27 @@ public class FilmServiceImpl implements FilmService {
 
 	@Override
 	public Optional<Film> getOne(Integer id) {
-		Optional<Film> film = repoFilm.findById(id);
+		return repoFilm.findById(id);
+	}
+	
+	@Override
+	public Optional<Film> getOne(@NonNull Specification<Film> spec) {
+		return repoFilm.findOne(spec);
+	}
 
-		return film;
+	@Override
+	public List<Film> getAll(@NonNull Specification<Film> spec) {
+		return repoFilm.findAll(spec);
+	}
+
+	@Override
+	public Page<Film> getAll(@NonNull Specification<Film> spec, @NonNull Pageable pageable) {
+		return repoFilm.findAll(spec, pageable);
+	}
+
+	@Override
+	public List<Film> getAll(@NonNull Specification<Film> spec, @NonNull Sort sort) {
+		return repoFilm.findAll(spec, sort);
 	}
 
 	@Override
