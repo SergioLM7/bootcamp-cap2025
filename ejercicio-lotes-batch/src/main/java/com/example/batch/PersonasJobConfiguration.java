@@ -254,6 +254,7 @@ public class PersonasJobConfiguration {
 				.build();
 	}
 	
+	//Sexto personasJob para conectar con otro microservicio, obtener sus datos y volcarlos en un CSV en nuestro folder output
 	@Bean
 	public Job personasJob(PersonasJobListener listener, Step photoStep) {
 		return new JobBuilder("personasJob", jobRepository).incrementer(new RunIdIncrementer()).listener(listener)
