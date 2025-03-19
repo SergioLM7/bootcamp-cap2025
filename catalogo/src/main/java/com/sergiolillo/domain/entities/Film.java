@@ -99,7 +99,6 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 
 	@Column(name="rental_duration", nullable=false)
 	@NotNull(message="La rentalDuration no puede ser nula")
-	@Positive
 	@DecimalMin(value = "0.0", inclusive = false, message="El rentalDuration no puede ser negativo ni 0.0")
 	private byte rentalDuration;
 

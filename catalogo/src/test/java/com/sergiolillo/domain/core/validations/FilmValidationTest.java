@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import com.sergiolillo.domain.entities.Actor;
 import com.sergiolillo.domain.entities.Film;
 import com.sergiolillo.domain.entities.Language;
+import com.sergiolillo.domain.entities.Film.Rating;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -23,6 +24,7 @@ public class FilmValidationTest {
     private Validator validator;
     private Film film;
     private Language language;
+    
 
     @BeforeEach
     public void setUp() {
@@ -32,7 +34,7 @@ public class FilmValidationTest {
         language = new Language();
         language.setName("English");
         
-        film = new Film(1, "Test Film", 120, "PG", (short) 2025, (byte) 7, new BigDecimal("4.99"), new BigDecimal("19.99"), "Test Title", language);
+        film = new Film(1, "Test Title", "A sample description", (short) 2025, language, null, (byte) 7, new BigDecimal("4.99"), 180, new BigDecimal("19.99"), Rating.getEnum("PG"));
     }
     
     @Test
@@ -146,15 +148,59 @@ public class FilmValidationTest {
         assertFalse(violations.isEmpty(), "Debe haber violaciones de validación para la longitud cero");
         assertEquals(1, violations.size(), "Debe haber una violación para la longitud cero");
     }
-
+    
     @Test
-    public void testInvalidRatingNull() {
-        film.setRating(null); 
+    public void testInvalidReleaseYearMin() {
+        film.setReleaseYear((short) 1899);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
-        assertTrue(violations.isEmpty(), "No debe haber violaciones para el rating nulo");
+        assertFalse(violations.isEmpty(), "Debe haber violaciones de validación para el releaseYear menor que 1900");
+        assertEquals(1, violations.size(), "Debe haber una violación para el releaseYear menor que 1900");
     }
     
+    @Test
+    public void testInvalidReleaseYearMax() {
+        film.setReleaseYear((short) 2156); 
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertFalse(violations.isEmpty(), "Debe haber violaciones de validación para el releaseYear mayor que 2155");
+        assertEquals(1, violations.size(), "Debe haber una violación para el releaseYear mayor que 2155");
+    }
+    
+    @Test
+    public void testValidReleaseYear() {
+        film.setReleaseYear((short) 2024); 
 
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertTrue(violations.isEmpty(), "No debe haber violaciones de validación para el releaseYear");
+
+    }
+    
+    @Test
+    public void testInvalidRentalDurationZero() {
+        film.setRentalDuration((byte) 0);
+
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertFalse(violations.isEmpty(), "Debe haber violaciones de validación para rentalDuration cero");
+        assertEquals(1, violations.size(), "Debe haber una violación para rentalDuration cero");
+    }
+    
+    @Test
+    public void testInvalidRentalDurationNegative() {
+        film.setRentalDuration((byte) -1);
+
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        assertFalse(violations.isEmpty(), "Debe haber violaciones de validación para rentalDuration negativo");
+        assertEquals(1, violations.size(), "Debe haber una violación para rentalDuration negativo");
+    }
+
+    @Test
+    public void testInvalidRatingUnexpectedValue() {
+        try {
+            film.setRating(Rating.getEnum("INVALID"));
+            fail("Se esperaba una IllegalArgumentException cuando se pasa un valor inesperado para el rating");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Unexpected value"), "El mensaje de la excepción no es el esperado");
+        }
+    }
 
 }
