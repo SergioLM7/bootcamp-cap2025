@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.sergiolillo.domain.core.entities.AbstractEntity;
+
 
 /**
  * The persistent class for the film database table.
@@ -18,7 +20,7 @@ import java.util.Objects;
 @Entity
 @Table(name="film")
 @NamedQuery(name="Film.findAll", query="SELECT f FROM Film f")
-public class Film implements Serializable {
+public class Film extends AbstractEntity<Film> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static enum Rating {
