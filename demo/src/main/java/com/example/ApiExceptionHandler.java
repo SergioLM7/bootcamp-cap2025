@@ -158,10 +158,11 @@ public class ApiExceptionHandler {
 		return problem;
 	}
 
-	@ExceptionHandler({ Exception.class })
-	public ProblemDetail unknow(Exception exception) {
-		log.error("Unhandled exception", exception);
-		return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
-	}
+	//Para excepciones generales
+//	@ExceptionHandler({ Exception.class })
+//	public ProblemDetail unknow(Exception exception) {
+//		log.error("Unhandled exception", exception);
+//		return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+//	}
 
 }
