@@ -92,7 +92,7 @@ public class DemoApplication implements CommandLineRunner {
 //		dao.getByActorIdGreaterThan(200).forEach(o -> System.err.println(o.getId() + " " + o.getNombre()));
 //		dao.findByActorIdGreaterThan(200).forEach(System.err::println);
 //		dao.findByActorIdGreaterThan(200, ActorDTO.class).forEach(System.err::println);
-		dao.findByActorIdGreaterThan(200, ActorShort.class).forEach(o -> System.err.println(o.getId() + " " + o.getNombre()));
+		//dao.findByActorIdGreaterThan(200, ActorShort.class).forEach(o -> System.err.println(o.getId() + " " + o.getNombre()));
 
 		
 		//Busca todos los Actores y los imprime en pantalla
