@@ -3,6 +3,7 @@ package com.sergiolillo.domain.entities;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,8 @@ import com.sergiolillo.domain.entities.Film.Rating;
 public class FilmTest {
 	
 ;
-    private FilmActor actor;
+    private Actor actor = new Actor(1, "Johnny", "Depp");
+
     private Language language;
     private Film film = new Film(1, "Test Title", "A sample description", (short) 2025, language, null, (byte) 7, new BigDecimal("4.99"), 180, new BigDecimal("19.99"), Rating.getEnum("PG"));
 
@@ -23,8 +25,6 @@ public class FilmTest {
 
     @Test
     public void testConstructorFullParams() {
-        Film film = new Film(1, "Test Title", "A sample description", (short) 2025, language, null, (byte) 7, new BigDecimal("4.99"), 180, new BigDecimal("19.99"), Rating.getEnum("PG"));
-
         assertNotNull(film);
         
         assertAll("Comprobaciones de Constructor Completo",
@@ -42,7 +42,7 @@ public class FilmTest {
 
     @Test
     public void testConstructorBasicParams() {
-        Film film = new Film(1, "Test Title", language, (byte) 7, new BigDecimal("4.99"), new BigDecimal("19.99"));
+        film = new Film(1, "Test Title", language, (byte) 7, new BigDecimal("4.99"), new BigDecimal("19.99"));
 
         assertNotNull(film);
 
@@ -58,7 +58,7 @@ public class FilmTest {
     
     @Test
     public void testConstructorWithFilmId() {
-        Film film = new Film(1);
+        film = new Film(1);
 
         assertNotNull(film);
         
@@ -80,7 +80,6 @@ public class FilmTest {
 
     @Test
     public void testAddActor() {
-        Actor actor = new Actor(1, "Johnny", "Depp");
         film.addActor(actor);
 
         assertAll("Comprobaciones después de añadir un actor",
@@ -91,7 +90,6 @@ public class FilmTest {
 
     @Test
     public void testRemoveActorByActor() {
-        Actor actor = new Actor(1, "Johnny", "Depp");
         film.addActor(actor);
 
         film.removeActor(actor);
@@ -104,7 +102,6 @@ public class FilmTest {
     
     @Test
     public void testRemoveActorByActorId() {
-        Actor actor = new Actor(1, "Johnny", "Depp");
         film.addActor(actor);
 
         film.removeActor(actor.getActorId());
@@ -211,4 +208,78 @@ public class FilmTest {
         );
     }
     
+    @Test
+    public void testAddActorToFilm() {
+        film.addActor(actor);
+
+        assertAll("Verificaciones después de añadir Actor a Film",
+            () -> assertNotNull(film.getActors(), "La lista de actores no debe ser nula"),
+            () -> assertEquals(1, film.getActors().size(), "Debe haber un actor asociado a la película"),
+            () -> assertTrue(film.getActors().stream().anyMatch(fa -> fa.getActorId() == (actor.getActorId())), "El actor debe estar en la lista")
+        );
+    }
+    
+    @Test
+    public void testRemoveActorFromFilm() {
+        film.addActor(actor);
+
+        film.removeActor(actor);
+
+        assertAll("Verificaciones después de eliminar actor",
+            () -> assertTrue(film.getActors().isEmpty(), "La lista de actores debe estar vacía"),
+            () -> assertFalse(film.getActors().stream().anyMatch(fa -> fa.getActorId() == (actor.getActorId())), "El actor no debe estar en la lista")
+        );
+    }
+    
+    @Test
+    public void testFilmActorPKRelationship() {
+        FilmActor filmActor = new FilmActor(film, actor);
+        
+        filmActor.prePersiste();
+
+        FilmActorPK id = filmActor.getId();
+        assertAll("Verificación de la clave primaria compuesta",
+        	() -> assertNotNull(id, "El id de FilmActor no debe ser nulo"),
+            () -> assertEquals(1, id.getFilmId(), "El filmId debe ser 1"),
+            () -> assertEquals(1, id.getActorId(), "El actorId debe ser 1")
+        );
+    }
+    
+    @Test
+    public void testFilmActorPersistence() {
+        FilmActor filmActor = new FilmActor(film, actor);
+
+        assertAll("Verificación de FilmActor y sus entidades asociadas",
+            () -> assertNotNull(filmActor.getActor(), "El actor no debe ser nulo"),
+            () -> assertNotNull(filmActor.getFilm(), "La película no debe ser nula"),
+            () -> assertEquals(film, filmActor.getFilm(), "La película debe ser la misma"),
+            () -> assertEquals(actor, filmActor.getActor(), "El actor debe ser el mismo")
+        );
+    }
+    
+    @Test
+    public void testMergeActorsAndCategories() {
+        Actor actor1 = new Actor();
+        actor1.setActorId(1);
+        Actor actor2 = new Actor();
+        actor2.setActorId(2);
+        
+        film.addActor(actor1);
+        film.addActor(actor2);
+        
+        Category category1 = new Category();
+        category1.setCategoryId(1);
+        film.addCategory(category1);
+
+        Film target = new Film(1, "Old Title", "Old Description", (short) 2020, language, null, (byte) 7, new BigDecimal("4.99"), 180, new BigDecimal("19.99"), Rating.getEnum("G"));
+
+        film.merge(target);
+
+       assertAll("Verificaciones después de merge",
+            () -> assertTrue(target.getActors().contains(actor1), "El actor 1 debe estar en el target"),
+            () -> assertTrue(target.getActors().contains(actor2), "El actor 2 debe estar en el target"),
+            () -> assertTrue(target.getCategories().contains(category1), "La categoría 1 debe estar en el target")
+        );
+    }
+
 }

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sergiolillo.domain.core.entities.AbstractEntity;
 
 
@@ -121,21 +123,25 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="language_id", nullable=false)
 	@NotNull
+	@JsonManagedReference
 	private Language language;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
 	@JoinColumn(name="original_language_id")
+	@JsonManagedReference
 	private Language languageVO;
 
 	//bi-directional many-to-one association to FilmActor
 	//Cuando se guarde la película, si hay cambios en el filmActor, también los aplicará
 	//El orphanRemoval le dice que si va a borrar la película, primero borre las relaciones
 	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonBackReference
 	private List<FilmActor> filmActors = new ArrayList<FilmActor>();
 
 	//bi-directional many-to-one association to FilmCategory
 	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonBackReference
 	private List<FilmCategory> filmCategories = new ArrayList<FilmCategory>();
 
 	public Film() {
@@ -180,15 +186,24 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 
 
 
-	// TODO : ENUM de rating
-
-
 	public int getFilmId() {
 		return this.filmId;
 	}
 
 	public void setFilmId(int filmId) {
 		this.filmId = filmId;
+		
+		if (filmActors != null && filmActors.size() > 0)
+			filmActors.forEach(item -> {
+				if (item.getId().getFilmId() != filmId)
+					item.getId().setFilmId(filmId);
+			});
+		
+		if (filmCategories != null && filmCategories.size() > 0)
+			filmCategories.forEach(item -> {
+				if (item.getId().getFilmId() != filmId)
+					item.getId().setFilmId(filmId);
+			});
 	}
 
 	public String getDescription() {
@@ -314,7 +329,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		removeActor(new Actor(actorId));
 	}
 	
-	// Gestión de categorias
+	// GESTION DE CATEGORIAS
 
 	public List<Category> getCategories() {
 		return this.filmCategories.stream().map(item -> item.getCategory()).toList();
