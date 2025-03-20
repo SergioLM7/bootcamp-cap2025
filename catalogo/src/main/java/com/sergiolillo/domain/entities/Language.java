@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.sergiolillo.domain.core.entities.AbstractEntity;
@@ -32,6 +33,8 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="language_id", insertable=false, updatable=false, unique=true, nullable=false)
+	@JsonProperty("id")
+	@JsonView(Language.Partial.class)
 	private int languageId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
@@ -44,14 +47,18 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	@NotBlank(message="El nombre no puede estar vacío ni ser nulo")
 	@Size(max=20, min=2, message="La longitud del nombre debe estar entre 2 y 20 caracteres")
 	@Pattern(regexp="^[A-ZÀ-Ö ]+$", message="El nombre debe estar en mayúsculas")
+	@JsonProperty("idioma")
+	@JsonView(Language.Partial.class)
 	private String name;
 
 	//bi-directional many-to-one association to Film
-	@OneToMany(mappedBy="language", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
 	private List<Film> films;
 
 	//bi-directional many-to-one association to Film
-	@OneToMany(mappedBy="languageVO", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="languageVO")
+	@JsonIgnore
 	private List<Film> filmsVO;
 
 	public Language() {
@@ -153,13 +160,10 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (obj instanceof Language o)
+			return languageId == o.languageId;
+		else
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Language other = (Language) obj;
-		return languageId == other.languageId && Objects.equals(lastUpdate, other.lastUpdate)
-				&& Objects.equals(name, other.name);
 	}
 
 
