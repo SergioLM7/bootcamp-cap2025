@@ -1,11 +1,15 @@
 package com.example;
 
+import java.util.TreeMap;
+
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Sort;
 
 import com.example.domain.contracts.repositories.ActoresRepository;
@@ -18,8 +22,22 @@ import com.example.ioc.Repositorio;
 import com.example.ioc.Servicio;
 import com.example.util.Calculadora;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import jakarta.transaction.Transactional;
 
+@OpenAPIDefinition(
+		info = @Info(title = "Microservicio: Demos",  
+		version = "1.0",                
+		description = "**Demo** de Microservicios.",                
+		license = @License(name = "Apache 2.0", 
+		url = "https://www.apache.org/licenses/LICENSE-2.0.html"),                
+		contact = @Contact(name = "Sergio Lillo", 
+		url = "https://github.com/SergioLM7", 
+		email = "support@example.com")
+		) )
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 	@Autowired
@@ -29,6 +47,13 @@ public class DemoApplication implements CommandLineRunner {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 	
+	@Bean 
+	public OpenApiCustomizer sortSchemasAlphabetically() { 
+		return openApi -> { 
+			var schemas = openApi.getComponents().getSchemas(); 
+			openApi.getComponents().setSchemas(new TreeMap<>(schemas)); 
+		}; 
+	}
 	//Inyecta un Servicio en la variable srv al arrancar la aplicación
 	//Al estar dentro de la app, ya está dentro del contexto de inyección
 	@Autowired
