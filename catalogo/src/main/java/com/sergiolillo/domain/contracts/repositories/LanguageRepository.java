@@ -2,18 +2,15 @@ package com.sergiolillo.domain.contracts.repositories;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.ListCrudRepository;
 
 import com.sergiolillo.domain.entities.Language;
 
 
-public interface LanguageRepository extends JpaRepository<Language, Integer>, JpaSpecificationExecutor<Language>{
+public interface LanguageRepository extends ListCrudRepository<Language, Integer> {
 	
-	List<Language> findTop15ByNameStartingWithOrderByNameDesc (String prefijo);
-	List<Language> findTop15ByNameStartingWith (String prefijo, Sort orderBy);
+	List<Language> findAllByOrderByName();
 	
 	@Query(value="SELECT l FROM Language l ORDER BY l.lastUpdate DESC")
 	List<Language> findNovedades();

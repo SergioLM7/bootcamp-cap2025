@@ -3,6 +3,8 @@ package com.sergiolillo.domain.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.sergiolillo.domain.contracts.repositories.LanguageRepository;
 import com.sergiolillo.domain.contracts.services.LanguageService;
 import com.sergiolillo.domain.entities.Language;
@@ -10,6 +12,7 @@ import com.sergiolillo.exceptions.DuplicateKeyException;
 import com.sergiolillo.exceptions.InvalidDataException;
 import com.sergiolillo.exceptions.NotFoundException;
 
+@Service
 public class LanguageServiceImpl implements LanguageService{
 	
 	LanguageRepository dao;
@@ -25,9 +28,7 @@ public class LanguageServiceImpl implements LanguageService{
 
 	@Override
 	public Optional<Language> getOne(Integer id) {
-		Optional<Language> category = dao.findById(id);
-
-		return category;
+		return dao.findById(id);
 	}
 
 	@Override
@@ -61,12 +62,6 @@ public class LanguageServiceImpl implements LanguageService{
 		if(!dao.findById(item.getLanguageId()).isPresent() || item == null) {
 			throw new InvalidDataException("El idioma no existe.");
 		}
-		
-	    Language language = dao.findById(item.getLanguageId()).orElseThrow(() -> new InvalidDataException("El idioma no existe"));
-
-	    language.getFilms().forEach(film -> {
-	        film.setLanguage(null);
-	    });
 	    
 		dao.delete(item);
 		
@@ -78,14 +73,12 @@ public class LanguageServiceImpl implements LanguageService{
 	        throw new InvalidDataException("El idioma con el ID " + id + " no existe.");
 	    }
 
-	    Language language = dao.findById(id).orElseThrow(() -> new InvalidDataException("El idioma no existe"));
-
-	    language.getFilms().forEach(film -> {
-	        film.setLanguage(null);
-	    });
-
 	    dao.deleteById(id);
-		
+	}
+
+	@Override
+	public List<Language> findAllByOrderByName() {
+		return dao.findAllByOrderByName();
 	}
 
 }
