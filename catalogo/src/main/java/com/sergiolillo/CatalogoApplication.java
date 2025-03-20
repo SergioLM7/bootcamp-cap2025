@@ -42,7 +42,7 @@ public class CatalogoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicación arrancada");
-		checkFilmWithAutor();
+		//checkFilmWithAutor();
 	}
 	
 
