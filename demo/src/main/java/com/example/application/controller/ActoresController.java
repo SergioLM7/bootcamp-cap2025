@@ -1,6 +1,7 @@
 package com.example.application.controller;
 
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid; 
 
 
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus; 
 import org.springframework.web.bind.annotation.RestController; 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import com.example.domain.contracts.services.ActoresService;
@@ -41,10 +44,16 @@ public class ActoresController {
 		this.srv = srv;
 	}
 	
-	
+	//Listado completo
 	@GetMapping 
 	public List<ActorDTO> getAll() { 
 		return srv.getByProjection(ActorDTO.class);
+	} 
+	
+	//Listado paginado
+	@GetMapping (params = {"page"})
+	public Page<ActorDTO> getAll(Pageable pageable) { 
+		return srv.getByProjection(pageable, ActorDTO.class);
 	} 
 		
 	@GetMapping(path = "/{id}") 
@@ -54,6 +63,20 @@ public class ActoresController {
 			throw new NotFoundException("No se encontró el actor con id " + id);
 		
 		return ActorDTO.from(item.get());
+	}
+	
+	//Clase inmutable que fusiona la sintaxis con la del constructor en vez de crear un DTO de nuevas
+	record Titulo(int id, String titulo) { }
+	
+	@GetMapping(path = "/{id}/pelis") 
+	@Transactional
+	public List<Titulo> getPeliculas(@PathVariable int id) throws NotFoundException { 
+		var item = srv.getOne(id);
+		if(item.isEmpty())
+			throw new NotFoundException("No se encontró el actor con id " + id);
+		
+		return item.get().getFilmActors().stream().map( o -> new Titulo(o.getFilm().getFilmId(), o.getFilm().getTitle()))
+				.toList();
 	}
 	
 	@PostMapping 
@@ -70,7 +93,8 @@ public class ActoresController {
 		return ResponseEntity.created(location).build(); 
 	} 
 	
-	@PutMapping("/{id}") @ResponseStatus(HttpStatus.NO_CONTENT) 
+	@PutMapping("/{id}") 
+	@ResponseStatus(HttpStatus.NO_CONTENT) 
 	public void update(@PathVariable int id, @Valid @RequestBody ActorDTO item) throws BadRequestException, NotFoundException, InvalidDataException { 
 		if(item.getActorId() != id) {
 			throw new BadRequestException("El id del actor no coincide con el recruso a modificar");
@@ -79,7 +103,9 @@ public class ActoresController {
 		srv.modify(ActorDTO.from(item));
 	} 
 	
-	@DeleteMapping("/{id}") @ResponseStatus(HttpStatus.NO_CONTENT) public void delete(@PathVariable int id) { 
+	@DeleteMapping("/{id}") 
+	@ResponseStatus(HttpStatus.NO_CONTENT) 
+	public void delete(@PathVariable int id) { 
 		srv.deleteById(id);
 	}
 
