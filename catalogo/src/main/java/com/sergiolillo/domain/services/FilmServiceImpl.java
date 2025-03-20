@@ -3,6 +3,7 @@ package com.sergiolillo.domain.services;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.sergiolillo.domain.contracts.repositories.FilmRepository;
 import com.sergiolillo.domain.contracts.services.FilmService;
 import com.sergiolillo.domain.entities.Film;
+import com.sergiolillo.domain.entities.models.FilmDetailsDTO;
 import com.sergiolillo.exceptions.DuplicateKeyException;
 import com.sergiolillo.exceptions.InvalidDataException;
 import com.sergiolillo.exceptions.NotFoundException;
@@ -128,15 +130,19 @@ public class FilmServiceImpl implements FilmService {
 		if(!repoFilm.findById(id).isPresent()) {
 			throw new NotFoundException("La película no existe.");
 		}
-		
 		repoFilm.deleteById(id);
-		
 	}
 
 
 	@Override
 	public List<Film> novedades(@NonNull Timestamp fecha) {
 		return repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
+	}
+	
+	@Override
+	public Page<FilmDetailsDTO> searchFilmsByTitle(String query, Pageable pageable) {
+		var queryLower = query.toLowerCase();
+	        return repoFilm.findByTitleContaining(queryLower, pageable).map(FilmDetailsDTO::from);
 	}
 
 }
