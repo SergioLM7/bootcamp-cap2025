@@ -316,6 +316,10 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		filmActors.add(filmActor);
 	}
 	
+	public void addActor(int actorId) {
+		addActor(new Actor(actorId));
+	}
+	
 	public void removeActor(Actor actor) {
 		var filmActor = filmActors.stream().filter(item -> item.getActor().equals(actor)).findFirst();
 		

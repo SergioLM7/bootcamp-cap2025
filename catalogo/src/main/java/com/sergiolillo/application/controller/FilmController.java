@@ -10,21 +10,29 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.sergiolillo.domain.contracts.services.FilmService;
+import com.sergiolillo.domain.entities.Film;
+import com.sergiolillo.domain.entities.models.ActorDTO;
 import com.sergiolillo.domain.entities.models.FilmDetailsDTO;
+import com.sergiolillo.domain.entities.models.FilmEditDTO;
 import com.sergiolillo.domain.entities.models.FilmShortDTO;
+import com.sergiolillo.exceptions.BadRequestException;
+import com.sergiolillo.exceptions.DuplicateKeyException;
 import com.sergiolillo.exceptions.InvalidDataException;
 import com.sergiolillo.exceptions.NotFoundException;
 
 import java.net.URI;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +44,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/film/v1")
-@Tag(name="Film Controller", description="Controller for film entity")
+@Tag(name="Film Controller", description="Controller for Film entity")
 public class FilmController {
 	
 	private FilmService srv;
@@ -52,26 +60,42 @@ public class FilmController {
 		return srv.getByProjection(pageable, FilmShortDTO.class);
 	} 
 	
-	@GetMapping(path = "/{id}") 
+	@GetMapping("/{id}") 
 	@Operation(summary="Gets a film details by its ID")
-	public FilmDetailsDTO getOne(@PathVariable @Parameter(description="Film ID") int id) { 
+	public FilmDetailsDTO getOne(@PathVariable @Parameter(description="Film ID") int id) throws NotFoundException { 
 		var item = srv.getOne(id);
+		
+		if(item.isEmpty())
+			throw new NotFoundException("No se encontró la película con id " + id);
+		
 		return FilmDetailsDTO.from(item.get());
 	}
 	
-//	@PostMapping
-//	@ApiResponse(responseCode = "201", description = "Film created")
-//	public ResponseEntity<Object> create(@Valid @RequestBody FilmDetailsDTO item) throws DuplicateKeyException, InvalidDataException {
-//		
-//		var newItem = srv.add(FilmDetailsDTO.from(item));
-//			
-//
-//		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-//				.path("/{id}") 
-//				.buildAndExpand(newItem.getActorId()).toUri(); 
-//		
-//		return ResponseEntity.created(location).build(); 
-//	} 
+	@PostMapping("/create")
+	@ApiResponse(responseCode = "201", description = "Film created")
+	@Operation(summary="Creates a film")
+	public ResponseEntity<Object> create(@Valid @RequestBody FilmEditDTO item) throws DuplicateKeyException, InvalidDataException {
+		
+		var newItem = srv.add(FilmEditDTO.from(item));
+			
+
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}") 
+				.buildAndExpand(newItem.getFilmId()).toUri();
+		
+		return ResponseEntity.created(location).build(); 
+	} 
+	
+	@PutMapping("/{id}") 
+	@ResponseStatus(HttpStatus.NO_CONTENT) 
+	@Operation(summary="Modifies a film by its ID")
+	public void update(@PathVariable int id, @Valid @RequestBody FilmEditDTO item) throws BadRequestException, NotFoundException, InvalidDataException { 
+		if(item.getFilmId() != id) {
+			throw new BadRequestException("El id de la película no coincide con el recruso a modificar");
+		}
+		
+		srv.modify(FilmEditDTO.from(item));
+	} 
 	
     @GetMapping("/search")
 	@Operation(summary="Search a film by its title",     
@@ -87,7 +111,7 @@ public class FilmController {
     
     @GetMapping("/newFilms")
 	@Operation(summary="Show films added after a date")
-   public Page<FilmDetailsDTO> searchLastFilmsAddedAfterDate(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Timestamp fecha, @ParameterObject Pageable pageable){
+   public Page<FilmShortDTO> searchLastFilmsAddedAfterDate(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime fecha, @ParameterObject Pageable pageable) throws InvalidDataException, MethodArgumentTypeMismatchException, NotFoundException, BadRequestException{
 	   
     	 return srv.newFilmsAfterDate(fecha, pageable);
    }
@@ -95,6 +119,7 @@ public class FilmController {
     
 	@DeleteMapping("/{id}") 
 	@ResponseStatus(HttpStatus.NO_CONTENT) 
+	@Operation(summary="Deletes a film by its ID")
 	public void delete(@PathVariable int id) throws NotFoundException, InvalidDataException { 
 		srv.deleteById(id);
 	}

@@ -1,6 +1,7 @@
 package com.sergiolillo.domain.services;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,11 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.sergiolillo.domain.contracts.repositories.FilmRepository;
 import com.sergiolillo.domain.contracts.services.FilmService;
 import com.sergiolillo.domain.entities.Film;
 import com.sergiolillo.domain.entities.models.FilmDetailsDTO;
+import com.sergiolillo.domain.entities.models.FilmEditDTO;
+import com.sergiolillo.domain.entities.models.FilmShortDTO;
+import com.sergiolillo.exceptions.BadRequestException;
 import com.sergiolillo.exceptions.DuplicateKeyException;
 import com.sergiolillo.exceptions.InvalidDataException;
 import com.sergiolillo.exceptions.NotFoundException;
@@ -135,8 +140,10 @@ public class FilmServiceImpl implements FilmService {
 
 
 	@Override
-	public Page<FilmDetailsDTO> newFilmsAfterDate(@NonNull Timestamp fecha, @NonNull Pageable pageable) {
-		return repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha, pageable);
+	public Page<FilmShortDTO> newFilmsAfterDate(@NonNull LocalDateTime fecha, @NonNull Pageable pageable) throws NotFoundException, InvalidDataException, MethodArgumentTypeMismatchException {
+		Timestamp timestamp = Timestamp.valueOf(fecha);
+
+		return repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(timestamp, pageable);
 	}
 	
 	@Override
