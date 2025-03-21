@@ -15,7 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.sergiolillo.domain.contracts.repositories.ActoresRepository;
+import com.sergiolillo.domain.contracts.repositories.ActorRepository;
 import com.sergiolillo.domain.entities.Actor;
 import com.sergiolillo.domain.entities.FilmActor;
 import com.sergiolillo.exceptions.DuplicateKeyException;
@@ -25,10 +25,10 @@ import com.sergiolillo.exceptions.NotFoundException;
 public class ActorServiceImplTest {
 	
 	@Mock
-	private ActoresRepository repoActor;
+	private ActorRepository repoActor;
 	
     @InjectMocks
-    private ActoresServiceImpl actorService;
+    private ActorServiceImpl actorService;
 	
     @BeforeEach
     public void setUp() {
