@@ -13,11 +13,25 @@ import com.sergiolillo.domain.contracts.services.CategoryService;
 import com.sergiolillo.domain.entities.Actor;
 import com.sergiolillo.domain.services.FilmServiceImpl;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import jakarta.transaction.Transactional;
 
 
 @SpringBootApplication
 @RestController
+@OpenAPIDefinition(
+		info = @Info(title = "Microservice: Catalogue",  
+		version = "1.0",                
+		description = "Microservice of a catalogue of films and actors similar to Netflix.",                
+		license = @License(name = "Apache 2.0", 
+		url = "https://www.apache.org/licenses/LICENSE-2.0.html"),                
+		contact = @Contact(name = "Sergio Lillo", 
+		url = "https://github.com/SergioLM7", 
+		email = "sergiolillom@gmail.com")
+		) )
 public class CatalogoApplication implements CommandLineRunner {
 	
 	@Autowired
