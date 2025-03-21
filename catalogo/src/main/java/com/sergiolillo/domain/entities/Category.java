@@ -38,12 +38,12 @@ public class Category implements Serializable {
 	@Column(nullable=false, length=25)
 	@NotBlank(message="El nombre no puede estar vacío ni ser nulo")
 	@Size(max=45, min=2, message="La longitud del nombre debe estar entre 2 y 45 caracteres")
-	@Pattern(regexp="^[A-ZÀ-Ö ]+$", message="El nombre debe estar en mayúsculas")
+	@Pattern(regexp="^[A-ZÀ-Ö][a-zà-ö -]+$", message="El nombre debe tener una primera letra mayúscula y el resto, minúsculas. No acepta números")
 	@JsonProperty("category")
 	private String name;
 
 	//bi-directional many-to-one association to FilmCategory
-	@OneToMany(mappedBy="category", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="category")
 	@JsonIgnore
 	private List<FilmCategory> filmCategories;
 
@@ -54,9 +54,10 @@ public class Category implements Serializable {
 		this.categoryId = categoryId;
 	}
 
-	public Category(int categoryId, @NotBlank @Size(max=45, min=2) @Pattern(regexp="^[A-ZÀ-Ö ]+$") String name) {
+	public Category(int categoryId, @NotBlank @Size(max=45, min=2) @Pattern(regexp="^[A-ZÀ-Ö][a-zà-ö -]+$") String name) {
 		this.categoryId = categoryId;
 		this.name = name;
+		this.lastUpdate = new Timestamp(System.currentTimeMillis());
 	}
 
 

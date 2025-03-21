@@ -28,9 +28,9 @@ public class CategoryTest {
     
     @ParameterizedTest
     @CsvSource({
-        "1, ACCIÓN",
-        "2, MADROÑO",
-        "3, CIENCIA FICCIÓN"
+        "1, Acción",
+        "2, Madroño",
+        "3, Ciencia Ficción"
     })
 	void testValidCreateCategory(int categoryId, String name) {
     	Category category = new Category(categoryId, name);
@@ -47,9 +47,10 @@ public class CategoryTest {
     @ParameterizedTest
     @CsvSource({
         "1, ",
-        "-1, ROMÁNTICA",
+        "-1, Romántica",
         "1, S",
-        "10, ROMÁNTICASROMÁNTICASROMÁNTICASROMÁNTICASROMÁNTICAS"
+        "10, ROMÁNTICASROMÁNTICASROMÁNTICASROMÁNTICASROMÁNTICAS",
+
     })
     public void testInvalidCategories(int categoryId, String name) {
     	Category category = new Category(categoryId, name);
@@ -58,7 +59,7 @@ public class CategoryTest {
     }
     
     @ParameterizedTest
-    @ValueSource(strings = {"ESPAÑA", "ACCIÓN", "TERROR", "CIENCIA FICCIÓN"})
+    @ValueSource(strings = {"España", "Acción", "Terror", "Ciencia ficción"})
     public void testValidNames(String name) {
     	Category category = new Category(1, name);
         
@@ -69,7 +70,7 @@ public class CategoryTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "españa", "12345", "Ciencia ficción"})
+    @ValueSource(strings = {"", "ESPAÑA", "12345", "CIENCIA FICCIÓN"})
     public void testInvalidNames(String name) {
         Category category = new Category(1, name);
         
@@ -85,11 +86,11 @@ public class CategoryTest {
 
         if (name == null || name.isEmpty()) {
             expectedMessages.add("El nombre no puede estar vacío ni ser nulo");
-            expectedMessages.add("El nombre debe estar en mayúsculas");
+            expectedMessages.add("El nombre debe tener una primera letra mayúscula y el resto, minúsculas. No acepta números");
             expectedMessages.add("La longitud del nombre debe estar entre 2 y 45 caracteres");
         }
-        if (!name.matches("^[A-ZÀ-Ö ]+$")) {
-            expectedMessages.add("El nombre debe estar en mayúsculas");
+        if (!name.matches("^[A-ZÀ-Ö][a-zà-ö -]+$")) {
+            expectedMessages.add("El nombre debe tener una primera letra mayúscula y el resto, minúsculas. No acepta números");
         }
         if(name.length() < 2 || name.length() > 45)
         	expectedMessages.add("La longitud del nombre debe estar entre 2 y 45 caracteres");
