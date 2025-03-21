@@ -14,7 +14,7 @@ import com.sergiolillo.domain.entities.Film;
 import com.sergiolillo.domain.entities.models.FilmDetailsDTO;
 
 public interface FilmRepository extends ProjectionsAndSpecificationJpaRepository<Film, Integer>{
-	List<Film> findByLastUpdateGreaterThanEqualOrderByLastUpdate(Timestamp fecha);
+	Page<FilmDetailsDTO> findByLastUpdateGreaterThanEqualOrderByLastUpdate(Timestamp fecha, Pageable pageable);
     Page<Film> findByTitleContaining(String title, Pageable pageable);
 
 }

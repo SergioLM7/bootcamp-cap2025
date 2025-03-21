@@ -7,7 +7,7 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sergiolillo.domain.contracts.repositories.ActoresRepository;
+import com.sergiolillo.domain.contracts.repositories.ActorRepository;
 import com.sergiolillo.domain.contracts.repositories.CategoryRepository;
 import com.sergiolillo.domain.contracts.services.CategoryService;
 import com.sergiolillo.domain.entities.Category;

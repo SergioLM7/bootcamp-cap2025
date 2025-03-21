@@ -12,6 +12,6 @@ import com.sergiolillo.domain.entities.Film;
 import com.sergiolillo.domain.entities.models.FilmDetailsDTO;
 
 public interface FilmService extends ProjectionDomainService<Film, Integer>, SpecificationDomainService<Film, Integer>{
-	List<Film> novedades(Timestamp fecha);
+	Page<FilmDetailsDTO> newFilmsAfterDate(Timestamp fecha, Pageable pageabl);
     Page<FilmDetailsDTO> searchFilmsByTitle(String title, Pageable pageable);
 }

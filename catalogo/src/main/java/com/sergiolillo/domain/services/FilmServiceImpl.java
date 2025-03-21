@@ -135,14 +135,15 @@ public class FilmServiceImpl implements FilmService {
 
 
 	@Override
-	public List<Film> novedades(@NonNull Timestamp fecha) {
-		return repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
+	public Page<FilmDetailsDTO> newFilmsAfterDate(@NonNull Timestamp fecha, @NonNull Pageable pageable) {
+		return repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha, pageable);
 	}
 	
 	@Override
 	public Page<FilmDetailsDTO> searchFilmsByTitle(String query, Pageable pageable) {
 		var queryLower = query.toLowerCase();
-	        return repoFilm.findByTitleContaining(queryLower, pageable).map(FilmDetailsDTO::from);
+	    return repoFilm.findByTitleContaining(queryLower, pageable).map(FilmDetailsDTO::from);
 	}
+
 
 }

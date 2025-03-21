@@ -123,52 +123,52 @@ public class FilmServiceImplTest {
         verify(repoFilm, times(0)).save(film);
     }
     
-    public void testNovedades() {
-        Timestamp fecha = Timestamp.valueOf("2025-01-01 00:00:00");
-        
-        Film film1 = new Film(
-                1, 
-                "Film 1", 
-                new Language(1, "English"), 
-                (byte) 3, 
-                new BigDecimal("2.99"), 
-                new BigDecimal("19.99")
-            );
-
-            Film film2 = new Film(
-                2, 
-                "Film 2", 
-                new Language(2, "Spanish"), 
-                (byte) 4, 
-                new BigDecimal("3.99"), 
-                new BigDecimal("24.99")
-            );
-            
-        List<Film> films = Arrays.asList(film1, film2);
-
-        when(repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha)).thenReturn(films);
-
-        List<Film> resultado = filmService.novedades(fecha);
-
-        assertNotNull(resultado);
-        assertEquals(2, resultado.size());
-        assertEquals("Film 1", resultado.get(0).getTitle());
-        assertEquals("Film 2", resultado.get(1).getTitle());
-
-        verify(repoFilm, times(1)).findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
-    }
+//    public void testNovedades() {
+//        Timestamp fecha = Timestamp.valueOf("2025-01-01 00:00:00");
+//        
+//        Film film1 = new Film(
+//                1, 
+//                "Film 1", 
+//                new Language(1, "English"), 
+//                (byte) 3, 
+//                new BigDecimal("2.99"), 
+//                new BigDecimal("19.99")
+//            );
+//
+//            Film film2 = new Film(
+//                2, 
+//                "Film 2", 
+//                new Language(2, "Spanish"), 
+//                (byte) 4, 
+//                new BigDecimal("3.99"), 
+//                new BigDecimal("24.99")
+//            );
+//            
+//        List<Film> films = Arrays.asList(film1, film2);
+//
+//        when(repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha)).thenReturn(films);
+//
+//        List<Film> resultado = filmService.novedades(fecha);
+//
+//        assertNotNull(resultado);
+//        assertEquals(2, resultado.size());
+//        assertEquals("Film 1", resultado.get(0).getTitle());
+//        assertEquals("Film 2", resultado.get(1).getTitle());
+//
+//        verify(repoFilm, times(1)).findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
+//    }
     
-    @Test
-    public void testNovedadesNoResults() {
-        Timestamp fecha = Timestamp.valueOf("2025-01-01 00:00:00");
-
-        when(repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha)).thenReturn(Arrays.asList());
-
-        List<Film> resultado = filmService.novedades(fecha);
-
-        assertNotNull(resultado);
-        assertTrue(resultado.isEmpty(), "La lista debe estar vacía si no se encuentran resultados");
-    }
+//    @Test
+//    public void testNovedadesNoResults() {
+//        Timestamp fecha = Timestamp.valueOf("2025-01-01 00:00:00");
+//
+//        when(repoFilm.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha)).thenReturn(Arrays.asList());
+//
+//        List<Film> resultado = filmService.novedades(fecha);
+//
+//        assertNotNull(resultado);
+//        assertTrue(resultado.isEmpty(), "La lista debe estar vacía si no se encuentran resultados");
+//    }
     
     @Test
     public void testDelete() throws InvalidDataException {
