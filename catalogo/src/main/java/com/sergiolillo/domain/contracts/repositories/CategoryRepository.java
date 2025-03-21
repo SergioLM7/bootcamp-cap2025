@@ -12,11 +12,8 @@ import com.sergiolillo.domain.entities.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer>, JpaSpecificationExecutor<Category> {
-   
-	List<Category> findTop15ByNameStartingWithOrderByNameDesc (String prefijo);
-	List<Category> findTop15ByNameStartingWith (String prefijo, Sort orderBy);
 	
-	@Query(value="SELECT c FROM Category c JOIN FETCH c.filmCategories ORDER BY c.lastUpdate DESC")
+	@Query(value="SELECT c FROM Category c ORDER BY c.lastUpdate DESC")
 	List<Category> findNovedades();
 	
 }

@@ -30,12 +30,8 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	@Transactional(readOnly=true)
 	public Optional<Category> getOne(Integer id) {
-		Optional<Category> category = dao.findById(id);
-        category.ifPresent(c -> c.getFilmCategories().size());
-
-		return category;
+		return dao.findById(id);
 	}
 
 	@Override
@@ -93,6 +89,12 @@ public class CategoryServiceImpl implements CategoryService {
 	    });
 	    
 		dao.delete(item);
+	}
+
+	@Override
+	public List<Category> findNovedades() {
+		
+		return dao.findNovedades();
 	}
 
 }

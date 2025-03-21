@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -32,7 +33,8 @@ public class Category implements Serializable {
 	private int categoryId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
-	@JsonIgnore
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+	@JsonProperty("lastUpdate")
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=25)
