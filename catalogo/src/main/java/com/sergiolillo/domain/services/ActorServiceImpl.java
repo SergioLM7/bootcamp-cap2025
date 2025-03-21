@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.sergiolillo.domain.contracts.repositories.ActorRepository;
 import com.sergiolillo.domain.contracts.services.ActorService;
 import com.sergiolillo.domain.entities.Actor;
+import com.sergiolillo.domain.entities.models.ActorDTO;
+import com.sergiolillo.domain.entities.models.FilmDetailsDTO;
 import com.sergiolillo.exceptions.DuplicateKeyException;
 import com.sergiolillo.exceptions.InvalidDataException;
 import com.sergiolillo.exceptions.NotFoundException;
@@ -110,5 +112,17 @@ public class ActorServiceImpl implements ActorService {
 		dao.deleteById(id);
 	}
 
+	@Override
+	public Page<ActorDTO> searchActorByTitle(String query, Pageable pageable) {
+		var queryLower = query.toLowerCase();
+		
+		return dao.searchFirstLastName(queryLower, pageable).map(ActorDTO::from);
+	}
+
+//	@Override
+//	public Page<FilmDetailsDTO> searchFilmsByTitle(String query, Pageable pageable) {
+//		var queryLower = query.toLowerCase();
+//	    return repoFilm.findByTitleContaining(queryLower, pageable).map(FilmDetailsDTO::from);
+//	}
 
 }

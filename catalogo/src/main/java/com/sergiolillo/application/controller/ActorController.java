@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -98,7 +99,7 @@ public class ActorController {
 	
 	@PutMapping("/{id}") 
 	@ResponseStatus(HttpStatus.NO_CONTENT) 
-	@Operation(summary="Modifies and actor by its ID")
+	@Operation(summary="Modifies an actor by its ID")
 	public void update(@PathVariable int id, @Valid @RequestBody ActorDTO item) throws BadRequestException, NotFoundException, InvalidDataException { 
 		if(item.getActorId() != id) {
 			throw new BadRequestException("El id del actor no coincide con el recruso a modificar");
@@ -113,5 +114,16 @@ public class ActorController {
 	public void delete(@PathVariable int id) throws NotFoundException, InvalidDataException { 
 		srv.deleteById(id);
 	}
+	
+    @GetMapping("/search")
+	@Operation(summary="Search an actor by its title",     
+	parameters = {
+	        @Parameter(name = "query", description = "The title search query. Could be an incompleted title", required = true),
+	        @Parameter(name = "page", description = "Page number to fetch", required = false, example = "0"),
+	        @Parameter(name = "size", description = "Number of results per page", required = false, example = "5")
+	})
+    public Page<ActorDTO> searcActors(@RequestParam String query, @ParameterObject Pageable pageable) {
+        return srv.searchActorByTitle(query, pageable);
+    }
 
 }
