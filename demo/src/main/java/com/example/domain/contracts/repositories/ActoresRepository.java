@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.example.domain.core.contracts.repositories.ProjectionsAndSpecificationJpaRepository;
 import com.example.domain.entities.Actor;
@@ -15,6 +16,7 @@ import com.example.domain.entities.DTO.ActorShort;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.NotFoundException;
 
+@RepositoryRestResource(exported=false)
 public interface ActoresRepository extends ProjectionsAndSpecificationJpaRepository<Actor, Integer> {
 
 	List<Actor> findByLastUpdateGreaterThanEqualOrderByLastUpdate(Timestamp fecha);
