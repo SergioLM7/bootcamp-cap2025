@@ -142,19 +142,8 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Actor [actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + ", lastUpdate="
-				+ lastUpdate + "]";
-	}
-	
-	
-	//Si tuviésemos propiedades para hacer esto...
-	public void jubilate() {
-		//change active to false
-		//jubilation date to currente date
-	}
-	
-	public void premioRecibido(String premio) {
-		//...
+		return "{actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + ", lastUpdate="
+				+ lastUpdate + "}";
 	}
 
 }

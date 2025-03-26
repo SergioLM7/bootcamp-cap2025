@@ -83,7 +83,7 @@ public class FilmCategory implements Serializable {
 
 	@Override
 	public String toString() {
-		return "FilmCategory [id=" + id + ", film=" + film + "]";
+		return "{id=" + id + ", category= " + category + ", film=" + film + "}";
 	}
 
 	@Override

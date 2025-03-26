@@ -46,7 +46,7 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	@Column(nullable=false, length=20)
 	@NotBlank(message="El nombre no puede estar vacío ni ser nulo")
 	@Size(max=20, min=2, message="La longitud del nombre debe estar entre 2 y 20 caracteres")
-	@Pattern(regexp="^[A-ZÀ-Ö ]+$", message="El nombre debe estar en mayúsculas")
+	@Pattern(regexp="^[A-ZÀ-Ö][a-zà-ö -]+$", message="El nombre debe tener una primera letra mayúscula y el resto, minúsculas. No acepta números")
 	@JsonProperty("idioma")
 	@JsonView(Language.Partial.class)
 	private String name;
@@ -64,15 +64,15 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	public Language() {
 	}
 	
-	
 
 	public Language(int languageId) {
 		this.languageId = languageId;
 	}
 
-	public Language(int languageId, @NotBlank @Size(max = 20, min=2) @Pattern(regexp="^[A-ZÀ-Ö ]+$")String name) {
+	public Language(int languageId, @NotBlank @Size(max = 20, min=2) @Pattern(regexp="^[A-ZÀ-Ö][a-zà-ö -]+$")String name) {
 		this.languageId = languageId;
 		this.name = name;
+		this.lastUpdate = new Timestamp(System.currentTimeMillis());
 	}
 
 
@@ -148,7 +148,7 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Language [languageId=" + languageId + ", name=" + name + "]";
+		return "{languageId=" + languageId + ", name=" + name + "}";
 	}
 
 	@Override

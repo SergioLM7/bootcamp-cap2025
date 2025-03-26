@@ -111,8 +111,8 @@ public class Category implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Category [categoryId=" + categoryId + ", name=" + name
-				+  ", lastUpdate=" + lastUpdate + "]";
+		return "{categoryId=" + categoryId + ", name=" + name
+				+  ", lastUpdate=" + lastUpdate + "}";
 	}
 
 	@Override

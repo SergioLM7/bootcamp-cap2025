@@ -27,9 +27,9 @@ public class LanguageTest {
     
     @ParameterizedTest
     @CsvSource({
-        "1, INGLÉS",
-        "2, ESPAÑOL",
-        "3, SWAHILI"
+        "1, Inglés",
+        "2, Español",
+        "3, Swahili"
     })
 	void testValidCreateLanguage(int languageId, String name) {
     	Language language = new Language(languageId, name);
@@ -46,7 +46,7 @@ public class LanguageTest {
     @ParameterizedTest
     @CsvSource({
         "0, INGLÉS",
-        "-1, italiano",
+        "-1, Italiano",
         "2, ",
         "3, S",
         "2, INGLÉSINGLÉSINGLÉSINGLÉS",
@@ -58,7 +58,7 @@ public class LanguageTest {
     }
     
     @ParameterizedTest
-    @ValueSource(strings = {"INGLÉS", "ESPAÑOL", "JAPONÉS", "COREANO"})
+    @ValueSource(strings = {"Inglés", "Español", "Japonés", "Coreano"})
     public void testValidNames(String name) {
     	Language language = new Language(2, name);
         
@@ -69,7 +69,7 @@ public class LanguageTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "inglés", "12345", "coreano"})
+    @ValueSource(strings = {"", "inglés", "12345", "COREANO"})
     public void testInvalidNames(String name) {
     	Language language = new Language(2, name);
         
@@ -85,11 +85,11 @@ public class LanguageTest {
 
         if (name == null || name.isEmpty()) {
             expectedMessages.add("El nombre no puede estar vacío ni ser nulo");
-            expectedMessages.add("El nombre debe estar en mayúsculas");
+            expectedMessages.add("El nombre debe tener una primera letra mayúscula y el resto, minúsculas. No acepta números");
             expectedMessages.add("La longitud del nombre debe estar entre 2 y 20 caracteres");
         }
-        if (!name.matches("^[A-ZÀ-Ö ]+$")) {
-            expectedMessages.add("El nombre debe estar en mayúsculas");
+        if (!name.matches("^[A-ZÀ-Ö][a-zà-ö -]+$")) {
+            expectedMessages.add("El nombre debe tener una primera letra mayúscula y el resto, minúsculas. No acepta números");
         }
         if(name.length() < 2 || name.length() > 20)
         	expectedMessages.add("La longitud del nombre debe estar entre 2 y 20 caracteres");
