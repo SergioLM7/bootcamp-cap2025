@@ -7,7 +7,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.sergiolillo.domain.entities.Film.Rating;
@@ -15,7 +14,6 @@ import com.sergiolillo.domain.entities.Film.Rating;
 
 public class FilmTest {
 	
-;
     private Actor actor = new Actor(1, "Johnny", "Depp");
 
     private Language language;
