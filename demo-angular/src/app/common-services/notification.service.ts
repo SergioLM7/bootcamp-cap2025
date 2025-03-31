@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { LoggerService } from 'src/lib/my-core/services/logger.service';
+import { Subject } from 'rxjs';
 
 export enum NotificationType {
   error = 'error',
@@ -31,8 +32,9 @@ export class Notification {
 @Injectable({
   providedIn: 'root',
 })
-export class NotificationService {
+export class NotificationService implements OnDestroy {
   public readonly NotificationType = NotificationType;
+  private notificacion$ = new Subject<Notification>();
 
   private listado: Notification[] = [];
 
@@ -44,6 +46,10 @@ export class NotificationService {
 
   public get HayNotificaciones() {
     return this.listado.length > 0;
+  }
+
+  public get Notificacion() { 
+    return this.notificacion$; 
   }
 
   public add(msg: string, type: NotificationType = NotificationType.error) {
@@ -59,6 +65,8 @@ export class NotificationService {
     const n = new Notification(id, msg, type);
 
     this.listado.push(n);
+
+    this.notificacion$.next(n);
 
     // Redundancia: Los errores también se muestran en consola
     if (type === NotificationType.error) {
@@ -80,5 +88,8 @@ export class NotificationService {
       this.listado.splice(0);
   }
 
+  ngOnDestroy(): void { 
+    this.notificacion$.complete() 
+  }
   
 }
