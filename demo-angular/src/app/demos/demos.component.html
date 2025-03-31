@@ -1,6 +1,6 @@
 <p>
-    <input type="button" value="Error" (click)="vm.add('Esto es una notificación de error')" />
-    <input type="button" value="Warn" (click)="vm.add('Esta notificación es un aviso', vm.NotificationType.warn)" />
-    <input type="button" value="Info" (click)="vm.add('Solo una notificación informativa', vm.NotificationType.info)" />
-    <input type="button" value="Log" (click)="vm.add('Para trazar con notificaciones', vm.NotificationType.log)" />
+    <input class="alert alert-danger" type="button" value="Error" (click)="vm.add('Esto es una notificación de error')" />
+    <input class="alert alert-warning" type="button" value="Warn" (click)="vm.add('Esta notificación es un aviso', vm.NotificationType.warn)" />
+    <input class="alert alert-primary" type="button" value="Info" (click)="vm.add('Solo una notificación informativa', vm.NotificationType.info)" />
+    <input class="alert alert-success" type="button" value="Log" (click)="vm.add('Para trazar con notificaciones', vm.NotificationType.log)" />
 </p>
