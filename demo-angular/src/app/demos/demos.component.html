@@ -1,6 +1,50 @@
+<h1>Hola, {{ name() | uppercase }}</h1>
+
 <p>
-    <input class="alert alert-danger" type="button" value="Error" (click)="vm.add('Esto es una notificación de error')" />
+
+<input type="text" [(ngModel)]="name" placeholder="Escribe tu nombre"/>
+<input type="button" value="saludar" (click)="greeting()" />
+<input type="button" value="despide" (click)="goodbye()" />
+<input type="button" value="di algo" (click)="say('something')" />
+<input type="button" value="cambia" (click)="change()" />
+
+
+    <!-- <input class="alert alert-danger" type="button" value="Error" (click)="vm.add('Esto es una notificación de error')" />
     <input class="alert alert-warning" type="button" value="Warn" (click)="vm.add('Esta notificación es un aviso', vm.NotificationType.warn)" />
     <input class="alert alert-primary" type="button" value="Info" (click)="vm.add('Solo una notificación informativa', vm.NotificationType.info)" />
-    <input class="alert alert-success" type="button" value="Log" (click)="vm.add('Para trazar con notificaciones', vm.NotificationType.log)" />
+    <input class="alert alert-success" type="button" value="Log" (click)="vm.add('Para trazar con notificaciones', vm.NotificationType.log)" /> -->
 </p>
+
+<p [textContent] ="result()"> esto se pierde </p>
+<!-- <p [innerHTML] ="result()"> esto se pierde </p> -->
+<p [hidden] ="invisible()"> ahora me ves </p>
+
+<p *ngIf="!visible()"> esto está controlado con directive </p>
+
+@if(visible()) {
+    <p>Ahora existo con flujos</p>
+}
+
+<p [class.semivisible]="invisible()">Ahora me ves bien</p>
+<p [ngClass]="style()">Lore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsum</p>
+
+<div>Fecha: {{ Fecha | date:'dd/MM/yyyy' }}</div>
+<p>Calcula 2 + 2 = {{ calculate(2,2) | currency:'EUR': 'symbol' : '1.2-2'}}</p>
+
+<ul>
+@for(item of list() | slice: -5; track item.id) {
+    <li [style.background-color]="$odd ? 'LightBlue' : 'Lavender'">{{item.name}} - {{item.id}} [Elemento {{$index + 1}} de {{ list().length}}]</li>
+}
+</ul>
+
+<p>
+    <select [(ngModel)]="idProvincia">
+        @for(item of list(); track item.id) {
+            <option [value]="item.id">{{ item.name }}</option>
+        }
+    </select>
+    Seleccionado: {{ idProvincia() }}
+    <input type="text" value="Tabarnia" #txtProvincia />
+    <input type="button" value="Añadir" (click)="add(txtProvincia.value)" />
+</p> 
+<p>{{ list() |json}}</p>

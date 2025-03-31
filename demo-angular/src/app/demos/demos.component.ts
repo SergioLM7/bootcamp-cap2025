@@ -1,10 +1,12 @@
 import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
 import { NotificationService, NotificationType } from '../common-services';
 import { Unsubscribable } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-demos',
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css',
 })
@@ -59,7 +61,7 @@ export class DemosComponent implements OnInit, OnDestroy {
   }
 
   add(provincia: string) {
-    const id = this.list()[this.list().length + 1].id + 1;
+    const id = this.list()[this.list().length - 1].id + 1;
     this.list.update(current => [...current, { id, name: provincia} ]);
     this.idProvincia.set(id);
   }
