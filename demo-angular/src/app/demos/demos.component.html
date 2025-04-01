@@ -1,4 +1,4 @@
-<h1>Hola, {{ name() | uppercase }}</h1>
+<h1>Hola, {{ name() | elipsis:10 }}</h1>
 
 <p>
 
@@ -40,7 +40,7 @@
 <p>
     <select [(ngModel)]="idProvincia">
         @for(item of list(); track item.id) {
-            <option [value]="item.id">{{ item.name }}</option>
+            <option [value]="item.id">{{ item.name | capitalize }}</option>
         }
     </select>
     Seleccionado: {{ idProvincia() }}
