@@ -33,7 +33,7 @@
 
 <ul>
 @for(item of list() | slice: -5; track item.id) {
-    <li [style.background-color]="$odd ? 'LightBlue' : 'Lavender'">{{item.name}} - {{item.id}} [Elemento {{$index + 1}} de {{ list().length}}]</li>
+    <li [style.background-color]="$odd ? 'LightBlue' : 'Lavender'">{{item.name | titlecase }} - {{item.id}} [Elemento {{$index + 1}} de {{ list().length}}]</li>
 }
 </ul>
 
