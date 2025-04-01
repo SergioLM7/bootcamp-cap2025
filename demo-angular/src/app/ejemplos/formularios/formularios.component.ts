@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ErrorMessagePipe } from '@my/core';
+import { ErrorMessagePipe, NIFNIEValidator, TypeValidator, UppercaseValidator } from '@my/core';
 
 @Component({
   selector: 'app-formularios',
-  imports: [FormsModule, ErrorMessagePipe],
+  imports: [FormsModule, ErrorMessagePipe, NIFNIEValidator, TypeValidator, UppercaseValidator],
   templateUrl: './formularios.component.html',
   styleUrl: './formularios.component.css'
 })
