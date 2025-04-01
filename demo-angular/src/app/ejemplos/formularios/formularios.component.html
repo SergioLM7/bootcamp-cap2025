@@ -9,30 +9,40 @@
     <div>
         <label for="id">ID: </label>
         <input type="number" id="id" name="id" [(ngModel)]="element.id" #id="ngModel" required/>
+        <output class="error" [hidden]="!id.hasError('required') || myForm.pristine">Es obligatorio</output>
     </div>
     <div>
         <label for="name">Name: </label>
         <input type="text" id="name" name="name" [(ngModel)]="element.name" #name="ngModel" required minlength="2" maxlength="10"/>
+        <output class="error" [hidden]="!name.hasError('required')">Es obligatorio</output>
+        <output class="error" [hidden]="!name.hasError('minlength') && !name.hasError('maxlength')">Debe tener entre 2 y 10 letras</output>
     </div>
     <div>
         <label for="lastName">Last Name: </label>
         <input type="text" id="lastName" name="lastName" [(ngModel)]="element.lastName" #lastName="ngModel" minlength="2" maxlength="10"/>
+        <output class="error" [hidden]="!lastName.hasError('minlength') && !lastName.hasError('maxlength')">Debe tener entre 2 y 10 letras</output>
+
     </div>
     <div>
         <label for="email">Email: </label>
         <input type="email" id="email" name="email" [(ngModel)]="element.email" #email="ngModel"/>
+        <output class="error" [hidden]="email.valid">{{email.errors | errormsg}}</output>
     </div>
     <div>
         <label for="entryDate">Entry Date: </label>
         <input type="date" id="entryDate" name="entryDate" [(ngModel)]="element.entryDate" #entryDate="ngModel"/>
+        <output class="error" [hidden]="entryDate.valid">{{entryDate.errors | errormsg}}</output>
     </div>
     <div>
         <label for="age">Age: </label>
         <input type="number" id="age" name="age" [(ngModel)]="element.age" #age="ngModel" min="16" max="67" step="1"/>
+        <output class="error" [hidden]="age.valid">{{age.errors | errormsg}}</output>
     </div>
     <div>
         <label for="nif">NIF: </label>
-        <input type="text" id="nif" name="nif" [(ngModel)]="element.nif" #nif="ngModel" pattern="^\d(1,8)[a-zA-Z]$"/>
+        <input type="text" id="nif" name="nif" [(ngModel)]="element.nif" #nif="ngModel" pattern="^\d{1,8}[a-zA-Z]$"/>
+        <output class="error" [hidden]="nif.valid">{{nif.errors | errormsg:'Debe tener de 1 a 8 dígitos y una letra al final'}}</output>
+
     </div>
     <div>
         <label for="active">Active: </label>
