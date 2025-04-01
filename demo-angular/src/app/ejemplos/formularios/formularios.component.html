@@ -12,21 +12,21 @@
         <output class="error" [hidden]="!id.hasError('required') || myForm.pristine">Es obligatorio</output>
     </div>
     <div>
-        <label for="name">Name: </label>
-        <input type="text" id="name" name="name" [(ngModel)]="element.name" #name="ngModel" required minlength="2" maxlength="10"/>
-        <output class="error" [hidden]="!name.hasError('required')">Es obligatorio</output>
-        <output class="error" [hidden]="!name.hasError('minlength') && !name.hasError('maxlength')">Debe tener entre 2 y 10 letras</output>
+        <label for="nombre">Name: </label>
+        <input type="text" id="nombre" name="nombre" [(ngModel)]="element.nombre" #nombre="ngModel" required minlength="2" maxlength="10"/>
+        <output class="error" [hidden]="!nombre.hasError('required')">Es obligatorio</output>
+        <output class="error" [hidden]="!nombre.hasError('minlength') && !nombre.hasError('maxlength')">Debe tener entre 2 y 10 letras</output>
     </div>
     <div>
-        <label for="lastName">Last Name: </label>
-        <input type="text" id="lastName" name="lastName" [(ngModel)]="element.lastName" #lastName="ngModel" minlength="2" maxlength="10" uppercase/>
-        <output class="error" [hidden]="lastName.valid">{{lastName.errors | errormsg}}</output>
+        <label for="apellidos">Last Name: </label>
+        <input type="text" id="apellidos" name="apellidos" [(ngModel)]="element.apellidos" #apellidos="ngModel" minlength="2" maxlength="10" uppercase/>
+        <output class="error" [hidden]="apellidos.valid">{{apellidos.errors | errormsg}}</output>
 
     </div>
     <div>
-        <label for="email">Email: </label>
-        <input type="email" id="email" name="email" [(ngModel)]="element.email" #email="ngModel"/>
-        <output class="error" [hidden]="email.valid">{{email.errors | errormsg}}</output>
+        <label for="correo">Email: </label>
+        <input type="email" id="correo" name="correo" [(ngModel)]="element.correo" #correo="ngModel"/>
+        <output class="error" [hidden]="correo.valid">{{correo.errors | errormsg}}</output>
     </div>
     <div>
         <label for="entryDate">Entry Date: </label>
@@ -34,9 +34,9 @@
         <output class="error" [hidden]="entryDate.valid">{{entryDate.errors | errormsg}}</output>
     </div>
     <div>
-        <label for="age">Age: </label>
-        <input type="number" id="age" name="age" [(ngModel)]="element.age" #age="ngModel" min="16" max="67" step="1"/>
-        <output class="error" [hidden]="age.valid">{{age.errors | errormsg}}</output>
+        <label for="edad">Age: </label>
+        <input type="number" id="edad" name="edad" [(ngModel)]="element.edad" #edad="ngModel" min="16" max="67" step="1"/>
+        <output class="error" [hidden]="edad.valid">{{edad.errors | errormsg}}</output>
     </div>
     <div>
         <label for="nif">NIF: </label>
