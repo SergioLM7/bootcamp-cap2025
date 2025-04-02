@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CONTACTOS_COMPONENTES } from './tmpl-anfitrion.component';
+import { CONTACTOS_COMPONENTES } from './contactos.component';
 
 
 

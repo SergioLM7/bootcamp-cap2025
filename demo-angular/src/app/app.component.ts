@@ -7,7 +7,7 @@ import { HomeComponent, NotificationModalComponent } from './main';
 import { FormulariosComponent } from './ejemplos/formularios/formularios.component';
 import { HeaderComponent } from "./main/header/header.component";
 import { FooterComponent } from "./main/footer/footer.component";
-import { ContactosComponent } from "./contactos/tmpl-anfitrion.component";
+import { ContactosComponent } from "./contactos/contactos.component";
 
 @Component({
   selector: 'app-root',

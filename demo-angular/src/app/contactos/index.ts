@@ -1,1 +1,1 @@
-export * from './tmpl-anfitrion.component';
+export * from './contactos.component';

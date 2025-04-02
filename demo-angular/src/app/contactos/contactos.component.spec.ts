@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContactosComponent } from './tmpl-anfitrion.component';
+import { ContactosComponent } from './contactos.component';
 
 describe('ContactosComponent', () => {
   let component: ContactosComponent;
