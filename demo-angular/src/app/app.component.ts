@@ -5,10 +5,12 @@ import { RouterOutlet } from '@angular/router';
 //import { DemosComponent } from './demos/demos.component';
 import { HomeComponent, NotificationModalComponent } from './main';
 import { FormulariosComponent } from './ejemplos/formularios/formularios.component';
+import { HeaderComponent } from "./main/header/header.component";
+import { FooterComponent } from "./main/footer/footer.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NotificationModalComponent, CommonModule, FormulariosComponent, HomeComponent],
+  imports: [RouterOutlet, NotificationModalComponent, CommonModule, FormulariosComponent, HomeComponent, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
