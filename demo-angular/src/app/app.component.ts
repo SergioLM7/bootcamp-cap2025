@@ -7,10 +7,15 @@ import { HomeComponent, NotificationModalComponent } from './main';
 import { FormulariosComponent } from './ejemplos/formularios/formularios.component';
 import { HeaderComponent } from "./main/header/header.component";
 import { FooterComponent } from "./main/footer/footer.component";
+import { ContactosComponent } from "./contactos/tmpl-anfitrion.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NotificationModalComponent, CommonModule, FormulariosComponent, HomeComponent, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, NotificationModalComponent, 
+    CommonModule, FormulariosComponent, 
+    HomeComponent, HeaderComponent, 
+    FooterComponent, ContactosComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
