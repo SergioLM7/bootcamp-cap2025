@@ -64,4 +64,9 @@ This backend is used by the frontend project: catalogo-front
 
 This project is for educational purposes as part of a Bootcamp program.
 
+## Contact
 
+**Sergio Lillo, Full Stack Developer**
+<a href="https://www.linkedin.com/in/lillosergio/" target="_blank"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1200px-LinkedIn_icon.svg.png" width=30px, height=30px/></a> - sergiolillom@gmail.com
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
