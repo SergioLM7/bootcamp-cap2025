@@ -10,6 +10,7 @@ This repository contains multiple projects and exercises developed as part of a 
 * <img src="https://github.com/devicons/devicon/blob/master/icons/angular/angular-original.svg" title="Angular" alt="Angular" width="40" height="40"/>&nbsp;
 * <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg" title="Java" alt="Java" width="40" height="40"/>&nbsp;
 * <img src="https://github.com/devicons/devicon/blob/master/icons/typescript/typescript-original.svg" title="Typescript" alt="Typescript" width="40" height="40"/>&nbsp;
+* <img src="https://github.com/devicons/devicon/blob/master/icons/mysql/mysql-original.svg" title="MySQL" alt="MySQL" width="40" height="40"/>&nbsp;
 * <img src="https://github.com/devicons/devicon/blob/master/icons/postman/postman-original-wordmark.svg" title="postman" alt="postman" width="40" height="40"/>&nbsp;
 * <img src="https://github.com/devicons/devicon/blob/master/icons/github/github-original-wordmark.svg" title="github" alt="github" width="40" height="40"/>&nbsp;
 
@@ -39,26 +40,28 @@ Below is an overview of the main projects in this repository:
 
 To run the projects in this repository, ensure you have the following installed:
 
-Java 17+
+-Java 17+
 
-Spring Boot 3+
+-Spring Boot 3+
 
-Maven
+-Maven
 
-Node.js & Angular CLI (for frontend projects)
+-Node.js & Angular CLI (for frontend projects)
 
-Docker (if needed for specific projects)
+-Docker or Podman
 
 ## Setup & Usage
 
 Each project has its own specific setup instructions. Please refer to the individual README files (if available) within each project directory for detailed steps.
 
 Clone the repository:
-
 ```
 git clone https://github.com/SergioLM7/bootcamp-cap2025
 cd any-folder-name
-
+```
+Use Sakila DB (here you have one container, but proceed as you prefer)
+```
+podman run -d --name mysql-sakila -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 jamarton/mysql-sakila
 ```
 
 Run a Spring Boot application
