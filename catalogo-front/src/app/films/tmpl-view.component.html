@@ -9,15 +9,15 @@
           </div>
           <div class="col-sm-6 col-md-8">
             <h4>{{ VM.Element.title }}</h4>
-            <p><strong>Descripción:</strong> {{ VM.Element.description }}</p>
-            <p><strong>Año de estreno:</strong> {{ VM.Element.releaseYear }}</p>
-            <p><strong>Duración:</strong> {{ VM.Element.length }} minutos</p>
-            <p><strong>Clasificación:</strong> {{ VM.Element.rating }}</p>
-            <p><strong>Precio de alquiler:</strong> {{ VM.Element.rentalRate  }}</p>
-            <p><strong>Costo de reemplazo:</strong> {{ VM.Element.replacementCost  }}</p>
+            <p><strong>Description:</strong> {{ VM.Element.description }}</p>
+            <p><strong>Year:</strong> {{ VM.Element.releaseYear }}</p>
+            <p><strong>Duration:</strong> {{ VM.Element.length }} minutos</p>
+            <p><strong>Classification:</strong> {{ VM.Element.rating }}</p>
+            <p><strong>Rental price:</strong> {{ VM.Element.rentalRate  }}</p>
+            <p><strong>Replace cost:</strong> {{ VM.Element.replacementCost  }}</p>
             
             <!-- Lista de actores con @for -->
-            <p><strong>Actores:</strong></p>
+            <p><strong>Actors:</strong></p>
             @for (actor of VM.Element.actors; track actor.index) {
               <ul>
                 <li>{{ actor }}</li>
@@ -25,7 +25,7 @@
             }
 
             <!-- Lista de categorías con @for -->
-            <p><strong>Categorías:</strong></p>
+            <p><strong>Categories:</strong></p>
             @for (category of VM.Element.categories; track category.index) {
               <ul>
                 <li>{{ category }}</li>
@@ -41,5 +41,5 @@
     </div>
   </div>
 } @else {
-  <h2>Sin datos</h2>
+  <h2>No Data</h2>
 }

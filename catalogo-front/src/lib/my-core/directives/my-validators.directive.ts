@@ -6,6 +6,39 @@ import isIBAN from 'validator/lib/isIBAN';
 // npm i validator
 // npm i @types/validator -D
 
+export function languagePatternValidator(): ValidatorFn {
+  const pattern = /^[A-ZÀ-Ö][a-zà-ö\s-]+$/;
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) {
+      return null; 
+    }
+
+    const isValid = pattern.test(control.value);
+    if (isValid) {
+      return null; 
+    }
+
+    return {
+      languagePattern: {
+        value: control.value,
+        message: 'La primera letra debe estar en mayúscula y las siguientes, en minúsculas',
+      },
+    };
+
+    
+  };
+}
+@Directive({
+  selector: '[languagePattern][formControlName],[languagePattern][formControl],[languagePattern][ngModel]',
+  providers: [{ provide: NG_VALIDATORS, useExisting: LanguagePatternValidator, multi: true }]
+})
+export class LanguagePatternValidator implements Validator {
+  validate(control: AbstractControl): ValidationErrors | null {
+    return languagePatternValidator()(control);
+  }
+}
+
 export function nifnieValidator(): ValidatorFn {
   return (control: AbstractControl): Record<string, any> | null => {
     if (!control.value) { return null; }

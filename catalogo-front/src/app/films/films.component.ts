@@ -6,6 +6,7 @@ import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FilmsViewModelService } from './filmsViewModel.service';
 import { ErrorMessagePipe, TypeValidator } from '@my/core';
+import { LanguagesDAOService } from '../languages/languagesViewModel.service';
 
 @Component({
   selector: 'app-films',
@@ -62,7 +63,9 @@ export class FilmsListComponent implements OnInit, OnDestroy {
   imports: [FormsModule, TypeValidator, ErrorMessagePipe],
 })
 export class FilmsAddComponent implements OnInit {
-  constructor(protected vm: FilmsViewModelService) {}
+  languages: any[] = [];
+  constructor(protected vm: FilmsViewModelService, private languageService: LanguagesDAOService) {}
+
   public get VM(): FilmsViewModelService {
     return this.vm;
   }
@@ -79,11 +82,12 @@ export class FilmsAddComponent implements OnInit {
 })
 export class FilmsEditComponent implements OnInit, OnDestroy {
   private obs$?: Subscription;
+  languages: any[] = [];
 
   constructor(
     protected vm: FilmsViewModelService,
     protected route: ActivatedRoute,
-    protected router: Router
+    protected router: Router,
   ) {}
 
   public get VM(): FilmsViewModelService {
@@ -95,6 +99,7 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
       const id = parseInt(params?.get('id') ?? '');
       if (id) {
         this.vm.edit(id);
+       
       } else {
         this.router.navigate(['/404.html']);
       }
