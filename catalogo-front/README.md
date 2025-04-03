@@ -64,3 +64,10 @@ This frontend communicates with the backend service: [Catalogo Backend](../catal
 For an overview of all Bootcamp projects, see the [Main Repository](/README.md) README.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
+
+## Contact
+
+**Sergio Lillo, Full Stack Developer**
+<a href="https://www.linkedin.com/in/lillosergio/" target="_blank"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1200px-LinkedIn_icon.svg.png" width=30px, height=30px/></a> - sergiolillom@gmail.com
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
