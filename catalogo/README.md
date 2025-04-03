@@ -8,10 +8,11 @@ The `catalogo` project is a backend service built with Spring Boot. It provides 
 
 - RESTful API with CRUD operations
 - Spring Boot and Spring Data JPA for data persistence
-- MySQL/PostgreSQL database support
+- MySQL database support
 - Docker support for containerized deployment
 - Lombok for reducing boilerplate code
 - OpenAPI (Swagger) documentation
+- JUnit 5 for testing
 
 ## Requirements
 
@@ -47,6 +48,8 @@ spring.datasource.password=root
 
 ```bash
 mvn spring-boot:run
+OR
+push play in Boot Dashboard
 ```
 
 ## API Documentation
