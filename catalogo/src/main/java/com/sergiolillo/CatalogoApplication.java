@@ -13,6 +13,7 @@ import com.sergiolillo.domain.contracts.services.CategoryService;
 import com.sergiolillo.domain.entities.Actor;
 import com.sergiolillo.domain.services.FilmServiceImpl;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -23,7 +24,7 @@ import jakarta.transaction.Transactional;
 @SpringBootApplication
 @RestController
 @OpenAPIDefinition(
-		info = @Info(title = "Microservice: Catalogue",  
+		info = @Info(title = "Microservice:Film Catalogue",  
 		version = "1.0",                
 		description = "Microservice of a catalogue of films and actors similar to Netflix.",                
 		license = @License(name = "Apache 2.0", 
@@ -31,7 +32,9 @@ import jakarta.transaction.Transactional;
 		contact = @Contact(name = "Sergio Lillo", 
 		url = "https://github.com/SergioLM7", 
 		email = "sergiolillom@gmail.com")
-		) )
+		),
+		externalDocs = @ExternalDocumentation(description = "Project Documentation", url = "https://github.com/SergioLM7/bootcamp-cap2025/tree/main/catalogo")
+)
 public class CatalogoApplication implements CommandLineRunner {
 	
 	@Autowired

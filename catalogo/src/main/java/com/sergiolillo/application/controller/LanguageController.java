@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/language/v1")
 @Tag(name="Language Controller", description="Controller for language entity")
 public class LanguageController {
@@ -45,7 +47,7 @@ public class LanguageController {
 		this.srv = srv;
 	}
 	
-	@GetMapping("/")
+	@GetMapping("")
 	@Operation(summary="Gets all languages")
 	public List<Language> getAll() {
 		return srv.getAll();

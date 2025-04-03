@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/actor/v1")
 @Tag(name="Actor Controller", description="Controller for Actor entity")
 public class ActorController {
@@ -59,7 +61,7 @@ public class ActorController {
 		return srv.getByProjection(pageable, ActorDTO.class);
 	} 
 		
-	@GetMapping(path = "/{id}") 
+	@GetMapping("/{id}") 
 	@Operation(summary="Gets an actor by its ID")
 	public ActorDTO getOne(@PathVariable @Parameter(description="Actor ID") int id) throws NotFoundException { 
 		var item = srv.getOne(id);

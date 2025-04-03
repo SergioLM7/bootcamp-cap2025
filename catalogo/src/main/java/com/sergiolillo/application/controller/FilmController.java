@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,6 +45,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/film/v1")
 @Tag(name="Film Controller", description="Controller for Film entity")
 public class FilmController {
@@ -52,6 +55,12 @@ public class FilmController {
 	public FilmController(FilmService srv) {
 		super();
 		this.srv = srv;
+	}
+	
+	@Hidden
+	@GetMapping
+	public List<FilmShortDTO> getAll(@RequestParam(defaultValue = "short") String mode) {
+		return srv.getByProjection(FilmShortDTO.class);
 	}
 	
 	@GetMapping (params = {"page"})
