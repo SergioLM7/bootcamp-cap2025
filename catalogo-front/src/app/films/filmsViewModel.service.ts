@@ -113,11 +113,14 @@ export class FilmsViewModelService {
   }
 
   public delete(key: any): void {
-    if (!window.confirm('¿Seguro?')) {
+    if (!window.confirm('Are you sure?')) {
       return;
     }
     this.dao.remove(key).subscribe({
-      next: () => this.list(),
+      next: () => {
+        this.list()
+        alert('Film deleted correctly');
+      },
       error: (err) => this.handleError(err),
     });
   }
@@ -134,13 +137,19 @@ export class FilmsViewModelService {
     switch (this.mode) {
       case 'add':
         this.dao.add(this.element).subscribe({
-          next: () => this.cancel(),
+          next: () => {
+            this.cancel()
+            alert('Film created correctly');
+          },
           error: (err) => this.handleError(err),
         });
         break;
       case 'edit':
         this.dao.change(this.idOriginal, this.element).subscribe({
-          next: () => this.cancel(),
+          next: () => {
+            this.cancel()
+            alert('Film updated correctly');
+          },
           error: (err) => this.handleError(err),
         });
         break;

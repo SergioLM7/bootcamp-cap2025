@@ -1,0 +1,34 @@
+<table class="table table-striped table-hover">
+    <thead>
+        <tr class="table-info">
+            <th class="display-4">Categories</th>
+            <th class="text-end">
+                <button class="btn btn-success" routerLink="add"><i class="fas fa-plus"></i> Add</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (item of VM.List; track item.id) {
+        <tr>
+            <td>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <a class="btn btn-link btn-lg px-0"
+                            [routerLink]="['/categories', item.id]">
+                                {{item.category}} </a>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="align-middle text-end">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-success" [routerLink]="[item.id, 'edit']"><i class="fas fa-pen"></i></button>
+                    <button class="btn btn-danger" (click)="VM.delete(item.id)"><i
+                            class="far fa-trash-alt"></i></button>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

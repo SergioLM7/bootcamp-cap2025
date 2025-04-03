@@ -42,26 +42,26 @@ export abstract class RESTDAOService<T, K> {
   providedIn: 'root',
 })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class LanguagesDAOService extends RESTDAOService<any, any> {
+export class CategoriesDAOService extends RESTDAOService<any, any> {
   constructor() {
-    super('language/v1');
+    super('category/v1');
   }
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class LanguagesViewModelService {
+export class CategoriesViewModelService {
   protected mode: ModeCRUD = 'list';
   protected listArray: any[] = [];
   protected element: any = {};
   protected idOriginal: any = null;
-  protected listURL = '/languages';
+  protected listURL = '/categories';
 
   constructor(
     protected notify: NotificationService,
     protected out: LoggerService,
-    protected dao: LanguagesDAOService,
+    protected dao: CategoriesDAOService,
     protected router: Router
   ) {}
 
@@ -118,7 +118,7 @@ export class LanguagesViewModelService {
     this.dao.remove(key).subscribe({
       next: () => {
         this.list();
-        alert('Language deleted correctly');
+        alert('Category deleted correctly');
       },
       error: (err) => this.handleError(err),
     });
@@ -129,7 +129,6 @@ export class LanguagesViewModelService {
     this.element = {};
     this.idOriginal = null;
     this.clear();
-    // this.list();
     this.router.navigateByUrl(this.listURL);   
   }
 
@@ -139,7 +138,7 @@ export class LanguagesViewModelService {
         this.dao.add(this.element).subscribe({
           next: () => {
             this.cancel();
-            alert('Language created correctly');
+            alert('Category created correctly');
           },
           error: (err) => this.handleError(err),
         });
@@ -148,7 +147,7 @@ export class LanguagesViewModelService {
         this.dao.change(this.idOriginal, this.element).subscribe({
           next: () => {
             this.cancel()
-            alert('Language updated correctly');
+            alert('Category updated correctly');
           },
           error: (err) => this.handleError(err),
         });
