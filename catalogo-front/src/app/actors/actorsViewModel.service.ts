@@ -2,10 +2,10 @@ import {
   HttpContextToken,
   HttpErrorResponse,
 } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../common-services';
 import { LoggerService } from '@my/core';
-import { Injectable } from '@angular/core';
 import { RESTDAOService } from '../common-classes/restDAOService.service';
 
 
@@ -13,34 +13,30 @@ export type ModeCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
 
 export const AUTH_REQUIRED = new HttpContextToken<boolean>(() => false);
 
-
-
 @Injectable({
   providedIn: 'root',
 })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class CategoriesDAOService extends RESTDAOService<any, any> {
+export class ActorsDAOService extends RESTDAOService<any, any> {
   constructor() {
-    super('category/v1');
+    super('actor/v1');
   }
-
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class CategoriesViewModelService {
+export class ActorsViewModelService {
   protected mode: ModeCRUD = 'list';
   protected listArray: any[] = [];
   protected element: any = {};
-  protected films: any[] = [];
   protected idOriginal: any = null;
-  protected listURL = '/categories';
+  protected listURL = '/actors';
 
   constructor(
     protected notify: NotificationService,
     protected out: LoggerService,
-    protected dao: CategoriesDAOService,
+    protected dao: ActorsDAOService,
     protected router: Router
   ) {}
 
@@ -52,10 +48,6 @@ export class CategoriesViewModelService {
   }
   public get Element(): any {
     return this.element;
-  }
-
-  public get Films(): any {
-    return this.films;
   }
 
   public list(): void {
@@ -92,14 +84,6 @@ export class CategoriesViewModelService {
       },
       error: (err) => this.handleError(err),
     });
-
-    this.dao.getFilms(key).subscribe({
-      next: (data) => {
-        this.films = data;
-      },
-      error: (err) => this.handleError(err),
-    });
-
   }
 
   public delete(key: any): void {
@@ -109,7 +93,7 @@ export class CategoriesViewModelService {
     this.dao.remove(key).subscribe({
       next: () => {
         this.list();
-        alert('Category deleted correctly');
+        alert('Actor deleted correctly');
       },
       error: (err) => this.handleError(err),
     });
@@ -120,6 +104,7 @@ export class CategoriesViewModelService {
     this.element = {};
     this.idOriginal = null;
     this.clear();
+    // this.list();
     this.router.navigateByUrl(this.listURL);   
   }
 
@@ -129,7 +114,7 @@ export class CategoriesViewModelService {
         this.dao.add(this.element).subscribe({
           next: () => {
             this.cancel();
-            alert('Category created correctly');
+            alert('Actor created correctly');
           },
           error: (err) => this.handleError(err),
         });
@@ -138,7 +123,7 @@ export class CategoriesViewModelService {
         this.dao.change(this.idOriginal, this.element).subscribe({
           next: () => {
             this.cancel()
-            alert('Category updated correctly');
+            alert('Actor updated correctly');
           },
           error: (err) => this.handleError(err),
         });

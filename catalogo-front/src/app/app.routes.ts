@@ -4,6 +4,7 @@ import { FilmsAddComponent, FilmsEditComponent, FilmsListComponent, FilmsViewCom
 import { PageNotFoundComponent } from './main/page-not-found/page-not-found.component';
 import { LanguagesAddComponent, LanguagesEditComponent, LanguagesListComponent, LanguagesViewComponent } from './languages';
 import { CategoriesAddComponent, CategoriesEditComponent, CategoriesListComponent, CategoriesViewComponent } from './categories';
+import { ActorsAddComponent, ActorsEditComponent, ActorsListComponent, ActorsViewComponent } from './actors/actors.component';
 
 export const routes: Routes = [
     {
@@ -30,6 +31,13 @@ export const routes: Routes = [
         { path: 'add', component: CategoriesAddComponent},
         { path: ':id/edit', component: CategoriesEditComponent},
         { path: ':id', component: CategoriesViewComponent},
+    ]},
+    { path: 'actors', 
+        children: [
+        { path: '', component: ActorsListComponent},
+        { path: 'add', component: ActorsAddComponent},
+        { path: ':id/edit', component: ActorsEditComponent},
+        { path: ':id', component: ActorsViewComponent},
     ]},
     {
         path:'**',

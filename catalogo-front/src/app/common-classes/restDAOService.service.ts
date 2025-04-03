@@ -15,6 +15,9 @@ export abstract class RESTDAOService<T, K> {
     get(id: K): Observable<T> {
       return this.http.get<T>(`${this.baseUrl}/${id}`, this.option);
     }
+    getFilms(id: K): Observable<T> {
+        return this.http.get<T>(`${this.baseUrl}/${id}/films`, this.option);
+      }
     add(item: T): Observable<T> {
       return this.http.post<T>(this.baseUrl, item, this.option);
     }
