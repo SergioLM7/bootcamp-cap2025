@@ -1,0 +1,7 @@
+.button-back {
+    background-color: rgba(84, 216, 172, 0.726);
+}
+
+.button-back:hover {
+    background-color: rgba(144, 212, 190, 0.726);
+}

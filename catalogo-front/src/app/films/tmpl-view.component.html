@@ -13,7 +13,6 @@
             <p><strong>Rental price:</strong> {{ VM.Element.rentalRate  }}</p>
             <p><strong>Replace cost:</strong> {{ VM.Element.replacementCost  }}</p>
             
-            <!-- Lista de actores con @for -->
             <p><strong>Actors:</strong></p>
             @for (actor of VM.Element.actors; track actor.index) {
               <ul>
@@ -21,7 +20,6 @@
               </ul>
             }
 
-            <!-- Lista de categorías con @for -->
             <p><strong>Categories:</strong></p>
             @for (category of VM.Element.categories; track category.index) {
               <ul>

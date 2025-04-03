@@ -8,7 +8,7 @@
         </tr>
     </thead>
     <tbody>
-        @for (item of VM.List; track item.id) {
+        @for (item of VM.List; track item.actorId) {
         <tr>
             <td>
                 <div class="container">
@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-md-10">
                             <a class="btn btn-link btn-lg px-0"
-                            [routerLink]="['/actors', item.id]">
+                            [routerLink]="['/actors', item.actorId]">
                                 {{item.firstName}} {{item.lastName}}</a>
                         </div>
                     </div>
@@ -26,8 +26,8 @@
             </td>
             <td class="align-middle text-end">
                 <div class="btn-group" role="group">
-                    <button class="btn btn-success" [routerLink]="[item.id, 'edit']"><i class="fas fa-pen"></i></button>
-                    <button class="btn btn-danger" (click)="VM.delete(item.id)"><i
+                    <button class="btn btn-success" [routerLink]="[item.actorId, 'edit']"><i class="fas fa-pen"></i></button>
+                    <button class="btn btn-danger" (click)="VM.delete(item.actorId)"><i
                             class="far fa-trash-alt"></i></button>
                 </div>
             </td>

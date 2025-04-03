@@ -4,7 +4,7 @@ import { FilmsAddComponent, FilmsEditComponent, FilmsListComponent, FilmsViewCom
 import { PageNotFoundComponent } from './main/page-not-found/page-not-found.component';
 import { LanguagesAddComponent, LanguagesEditComponent, LanguagesListComponent, LanguagesViewComponent } from './languages';
 import { CategoriesAddComponent, CategoriesEditComponent, CategoriesListComponent, CategoriesViewComponent } from './categories';
-import { ActorsAddComponent, ActorsEditComponent, ActorsListComponent, ActorsViewComponent } from './actors/actors.component';
+import { ActorsAddComponent, ActorsEditComponent, ActorsListComponent, ActorsViewComponent } from './actors';
 
 export const routes: Routes = [
     {

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ErrorMessagePipe, TypeValidator, LanguagePatternValidator } from '@my/core';
+import { ErrorMessagePipe, TypeValidator, UppercaseValidator } from '@my/core';
 import { ActorsViewModelService } from './actorsViewModel.service';
 
 @Component({
@@ -59,7 +59,7 @@ export class ActorsListComponent implements OnInit, OnDestroy {
   selector: 'app-actors-add',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./actors.component.css'],
-  imports: [FormsModule, TypeValidator, ErrorMessagePipe],
+  imports: [FormsModule, TypeValidator, ErrorMessagePipe, UppercaseValidator],
 })
 export class ActorsAddComponent implements OnInit {
   actors: any[] = [];
@@ -77,7 +77,7 @@ export class ActorsAddComponent implements OnInit {
   selector: 'app-actors-edit',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./actors.component.css'],
-  imports: [FormsModule, TypeValidator, ErrorMessagePipe, LanguagePatternValidator],
+  imports: [FormsModule, TypeValidator, ErrorMessagePipe, UppercaseValidator],
 })
 export class ActorsEditComponent implements OnInit, OnDestroy {
   private obs$?: Subscription;

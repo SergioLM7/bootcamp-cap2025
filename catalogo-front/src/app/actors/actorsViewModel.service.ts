@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../common-services';
 import { LoggerService } from '@my/core';
 import { RESTDAOService } from '../common-classes/restDAOService.service';
+import { Observable } from 'rxjs';
 
 
 export type ModeCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
@@ -21,6 +22,11 @@ export class ActorsDAOService extends RESTDAOService<any, any> {
   constructor() {
     super('actor/v1');
   }
+
+  override change(id: any, item: any): Observable<any> {
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.put<any>(url, item, this.option); 
+  }
 }
 
 @Injectable({
@@ -30,6 +36,7 @@ export class ActorsViewModelService {
   protected mode: ModeCRUD = 'list';
   protected listArray: any[] = [];
   protected element: any = {};
+  protected films: any[] = [];
   protected idOriginal: any = null;
   protected listURL = '/actors';
 
@@ -48,6 +55,10 @@ export class ActorsViewModelService {
   }
   public get Element(): any {
     return this.element;
+  }
+
+  public get Films(): any[] {
+    return this.films;
   }
 
   public list(): void {
@@ -81,6 +92,13 @@ export class ActorsViewModelService {
       next: (data) => {
         this.element = data;
         this.mode = 'view';
+      },
+      error: (err) => this.handleError(err),
+    });
+
+    this.dao.getFilms(key).subscribe({
+      next: (data) => {
+        this.films = data;
       },
       error: (err) => this.handleError(err),
     });

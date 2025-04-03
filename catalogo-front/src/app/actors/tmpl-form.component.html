@@ -1,0 +1,26 @@
+<h1>Actors</h1>
+@if(VM.Element) {
+  <form #miForm="ngForm" class="row gy-2 gx-2 align-items-start">
+    
+    <div class="form-floating col-md-4">
+      <input class="form-control" [class.is-invalid]="firstName.invalid" type="text" name="firstName" id="firstName"
+        [(ngModel)]="VM.Element.firstName" #firstName="ngModel" required minlength="2" maxlength="45" placeholder=" " uppercase />
+      <label for="title">First Name:</label>
+      <output class="invalid-feedback" [hidden]="firstName.valid">{{ firstName.errors | errormsg }}</output>
+    </div>
+
+    <div class="form-floating col-md-4">
+        <input class="form-control" [class.is-invalid]="lastName.invalid" type="text" name="title" id="title"
+          [(ngModel)]="VM.Element.lastName" #lastName="ngModel" required minlength="2" maxlength="45" placeholder=" " uppercase  />
+        <label for="title">Last Name:</label>
+        <output class="invalid-feedback" [hidden]="lastName.valid">{{ lastName.errors | errormsg }}</output>
+      </div>
+    
+    <div class="mt-2">
+      <input type="button" class="btn btn-success" value="Send" (click)="VM.send()" [disabled]="miForm.invalid">
+      <input type="button" class="btn btn-info" value="Cancel" (click)="VM.cancel()">
+    </div>
+  </form>
+} @else {
+  <h2>No Data</h2>
+}
