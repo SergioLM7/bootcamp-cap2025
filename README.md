@@ -18,9 +18,9 @@ This repository contains multiple projects and exercises developed as part of a 
 
 Below is an overview of the main projects in this repository:
 
-- catalogo: A backend service built with Spring Boot that manages CRUD operations for movies, actors, categories, and languages.
+- [Catalogo (Spring Boot Backend)](catalogo/README.md) - A backend microservice built with Spring Boot that manages CRUD operations for movies, actors, categories, and languages.
 
-- catalogo-front: An Angular frontend application for the catalogo project.
+- [Catalogo Front (Angular)](catalogo-front/README.md) - An Angular frontend application for the catalogo project.
 
 - demo-angular: A sample Angular project for testing and practice.
 
