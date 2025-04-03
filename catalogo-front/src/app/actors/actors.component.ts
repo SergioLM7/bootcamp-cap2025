@@ -135,7 +135,7 @@ export class ActorsViewComponent implements OnChanges {
   }
 }
 
-export const LANGUAGES_COMPONENTS = [
+export const ACTORS_COMPONENTS = [
   ActorsComponent,
   ActorsListComponent,
   ActorsAddComponent,

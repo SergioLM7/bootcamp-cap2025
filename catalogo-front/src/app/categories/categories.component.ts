@@ -135,7 +135,7 @@ export class CategoriesViewComponent implements OnChanges {
   }
 }
 
-export const LANGUAGES_COMPONENTS = [
+export const CATEGORIES_COMPONENTS = [
   CategoriesComponent,
   CategoriesListComponent,
   CategoriesAddComponent,

@@ -27,6 +27,10 @@ export class FilmsDAOService extends RESTDAOService<any, any> {
       const url = `${this.baseUrl}/${id}`;
       return this.http.put<any>(url, item, this.option); 
     }
+
+    override add(item: any): Observable<any> {
+      return this.http.post<any>(`${this.baseUrl}/create`, item, this.option);
+    }
 }
 
 @Injectable({
@@ -54,6 +58,14 @@ export class FilmsViewModelService {
   }
   public get Element(): any {
     return this.element;
+  }
+
+  public set Element(element:any) {
+    this.element = element;
+  }
+
+  getFilmById(id: number): Observable<any> {
+    return this.dao.get(id);
   }
 
   public list(): void {

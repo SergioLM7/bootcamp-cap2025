@@ -75,7 +75,7 @@
           <label for="actorId">Select Actors</label>
           <select class="form-control" id="actorId" [(ngModel)]="selectedActorIds" name="actorId" multiple>
             @for(actor of actors; track actor.actorId) {
-              <option [value]="actor.id">{{ actor.firstName }} {{ actor.lastName }}</option>
+              <option [value]="actor.actorId" [selected]="selectedActorIds.includes(actor.actorId)">{{ actor.firstName }} {{ actor.lastName }}</option>
             }
           </select>
         </div>
@@ -86,7 +86,7 @@
         <select class="form-control" [class.is-invalid]="languageId.invalid" name="languageId" id="languageId"
           [(ngModel)]="selectedLanguageId" #languageId="ngModel" required placeholder=" ">
           @for(language of languages; track language.id) {
-            <option [value]="language.languageId">{{ language.idioma }}</option>
+            <option [value]="language.id">{{ language.idioma }}</option>
           }
         </select>
     </div>
@@ -103,7 +103,12 @@
 
     <!-- Botones de Enviar y Volver -->
     <div class="mt-2">
-      <input type="button" class="btn btn-success" value="Send" (click)="VM.send()" [disabled]="miForm.invalid">
+      @if(VM.Mode === 'edit') {
+        <input type="button" class="btn btn-success" value="Send" (click)="saveFilm()" [disabled]="miForm.invalid">
+      }
+      @if(VM.Mode==='add') {
+        <input type="button" class="btn btn-success" value="Send" (click)="createFilm()" [disabled]="miForm.invalid">
+      }
       <input type="button" class="btn btn-info" value="Cancel" (click)="VM.cancel()">
     </div>
   </form>

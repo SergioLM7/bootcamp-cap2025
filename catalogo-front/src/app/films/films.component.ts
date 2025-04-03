@@ -1,4 +1,12 @@
-import { Component, forwardRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -65,21 +73,29 @@ export class FilmsListComponent implements OnInit, OnDestroy {
   imports: [FormsModule, TypeValidator, ErrorMessagePipe],
 })
 export class FilmsAddComponent implements OnInit {
+  
   languages: any[] = [];
   categories: any[] = [];
   actors: any[] = [];
-  selectedCategoryIds: number[] = []; 
+  selectedCategoryIds: number[] = [];
   selectedLanguageId: number = 0;
-  selectedActorIds: number[] = []; 
+  selectedActorIds: number[] = [];
 
-
-  constructor(protected vm: FilmsViewModelService, private languageVMService: LanguagesViewModelService, private categoriesVMService: CategoriesViewModelService, private actorsVMService: ActorsViewModelService) {}
+  constructor(
+    protected vm: FilmsViewModelService,
+    private languageVMService: LanguagesViewModelService,
+    private categoriesVMService: CategoriesViewModelService,
+    private actorsVMService: ActorsViewModelService
+  ) {}
 
   public get VM(): FilmsViewModelService {
     return this.vm;
   }
 
-
+  saveFilm() {
+    throw new Error('Method not implemented.');
+    }
+    
   ngOnInit(): void {
     this.vm.add();
 
@@ -104,6 +120,27 @@ export class FilmsAddComponent implements OnInit {
       error: (err) => console.error('Error loading categories:', err),
     });
   }
+
+  createFilm() {
+    const dataFilm = {
+      description: this.vm.Element.description,
+      length: this.vm.Element.length,
+      rating: this.vm.Element.rating,
+      releaseYear: this.vm.Element.releaseYear,
+      rentalDuration: this.vm.Element.rentalDuration,
+      rentalRate: this.vm.Element.rentalRate,
+      replacementCost: this.vm.Element.replacementCost,
+      title: this.vm.Element.title,
+      languageId: this.selectedLanguageId,
+      languageVO: null,
+      actors: this.selectedActorIds,
+      categories: this.selectedCategoryIds,
+    };
+
+    this.vm.Element = dataFilm;
+
+    this.vm.send();
+  }
 }
 
 @Component({
@@ -113,14 +150,18 @@ export class FilmsAddComponent implements OnInit {
   imports: [FormsModule, TypeValidator, ErrorMessagePipe],
 })
 export class FilmsEditComponent implements OnInit, OnDestroy {
+
+createFilm() {
+throw new Error('Method not implemented.');
+}
   private obs$?: Subscription;
   languages: any[] = [];
   categories: any[] = [];
   actors: any[] = [];
-  selectedCategoryIds: number[] = []; 
+  selectedCategoryIds: number[] = [];
   selectedLanguageId: number = 0;
-  selectedActorIds: number[] = []; 
-
+  selectedActorIds: number[] = [];
+  filmId: number = 0;
 
   constructor(
     protected vm: FilmsViewModelService,
@@ -139,8 +180,7 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
     this.obs$ = this.route.paramMap.subscribe((params: ParamMap) => {
       const id = parseInt(params?.get('id') ?? '');
       if (id) {
-        this.vm.edit(id);
-
+        this.filmId = id;
 
         this.actorsVMService.getAllActors().subscribe({
           next: (actors) => {
@@ -149,7 +189,6 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
           error: (err) => console.error('Error loading actors:', err),
         });
 
-        
         this.languageVMService.getAllLanguages().subscribe({
           next: (languages) => {
             this.languages = languages;
@@ -157,18 +196,66 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
           error: (err) => console.error('Error loading languages:', err),
         });
 
-        
         this.categoriesVMService.getAllCategories().subscribe({
           next: (categories) => {
             this.categories = categories;
           },
           error: (err) => console.error('Error loading categories:', err),
         });
-       
+
+        this.vm.getFilmById(id).subscribe({
+          next: (film) => {
+            this.onFilmLoaded(film);
+          },
+          error: (err) => console.error('Error loading film:', err),
+        });
+
+        this.vm.edit(id);
       } else {
         this.router.navigate(['/404.html']);
       }
     });
+  }
+
+  onFilmLoaded(film: any): void {
+    if (film) {
+      const language = this.languages.find((l) => l.idioma === film.language);
+      this.selectedLanguageId = language ? language.id : 0;
+
+      this.selectedCategoryIds = this.categories
+        .filter((category) => film.categories.includes(category.category))
+        .map((category) => category.id);
+
+      this.selectedActorIds = this.actors
+        .filter((actor) =>
+          film.actors.includes(actor.firstName + ' ' + actor.lastName)
+        )
+        .map((actor) => actor.actorId);
+    } else {
+      console.error('No film data received');
+    }
+  }
+
+  saveFilm() {
+    const dataFilm = {
+      filmId: this.filmId,
+      description: this.vm.Element.description,
+      length: this.vm.Element.length,
+      rating: this.vm.Element.rating,
+      releaseYear: this.vm.Element.releaseYear,
+      rentalDuration: this.vm.Element.rentalDuration,
+      rentalRate: this.vm.Element.rentalRate,
+      replacementCost: this.vm.Element.replacementCost,
+      title: this.vm.Element.title,
+      languageId: this.selectedLanguageId,
+      languageVO: null,
+      actors: this.selectedActorIds,
+      categories: this.selectedCategoryIds,
+    };
+
+    this.vm.Element = dataFilm;
+
+    this.vm.send();
   }
 
   ngOnDestroy(): void {
@@ -184,10 +271,7 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
 })
 export class FilmsViewComponent implements OnChanges {
   @Input() id?: string;
-  constructor(
-    protected vm: FilmsViewModelService,
-    protected router: Router
-  ) {}
+  constructor(protected vm: FilmsViewModelService, protected router: Router) {}
 
   public get VM(): FilmsViewModelService {
     return this.vm;
