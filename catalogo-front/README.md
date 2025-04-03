@@ -39,6 +39,12 @@ export const environment = {
   apiUrl: 'http://localhost:8001/'
 };
 ```
+Start back-end server:
+```bash
+mvn spring-boot:run
+OR
+push play in Boot Dashboard
+```
 
 ### Development server
 
