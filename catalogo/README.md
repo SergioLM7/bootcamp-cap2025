@@ -61,7 +61,9 @@ http://localhost:8001/swagger-ui/index.html
 
 ## Related Projects
 
-This backend is used by the frontend project: catalogo-front
+This backend is used by the frontend project: [catalogo-front](../catalogo-front/README.md).
+
+For an overview of all Bootcamp projects, see the [Main Repository README](../README.md).
 
 ## License
 
