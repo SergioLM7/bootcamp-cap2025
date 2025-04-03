@@ -1,0 +1,45 @@
+<h1>Film</h1>
+@if(VM.Element) {
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-6">
+      <div class="well well-sm">
+        <div class="row">
+          <div class="col-sm-6 col-md-4">
+            <i class="fa-solid fa-film"></i>
+          </div>
+          <div class="col-sm-6 col-md-8">
+            <h4>{{ VM.Element.title }}</h4>
+            <p><strong>Descripción:</strong> {{ VM.Element.description }}</p>
+            <p><strong>Año de estreno:</strong> {{ VM.Element.releaseYear }}</p>
+            <p><strong>Duración:</strong> {{ VM.Element.length }} minutos</p>
+            <p><strong>Clasificación:</strong> {{ VM.Element.rating }}</p>
+            <p><strong>Precio de alquiler:</strong> {{ VM.Element.rentalRate  }}</p>
+            <p><strong>Costo de reemplazo:</strong> {{ VM.Element.replacementCost  }}</p>
+            
+            <!-- Lista de actores con @for -->
+            <p><strong>Actores:</strong></p>
+            @for (actor of VM.Element.actors; track actor.index) {
+              <ul>
+                <li>{{ actor }}</li>
+              </ul>
+            }
+
+            <!-- Lista de categorías con @for -->
+            <p><strong>Categorías:</strong></p>
+            @for (category of VM.Element.categories; track category.index) {
+              <ul>
+                <li>{{ category }}</li>
+              </ul>
+            }
+
+            <div class="btn-group">
+              <input class="btn btn-secondary" type="button" value="Volver" (click)="VM.cancel()">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <h2>Sin datos</h2>
+}
