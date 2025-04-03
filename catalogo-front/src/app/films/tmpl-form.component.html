@@ -69,25 +69,36 @@
       <label for="replacementCost">Replace cost:</label>
       <output class="invalid-feedback" [hidden]="replacementCost.valid">{{ replacementCost.errors | errormsg }}</output>
     </div>
+
+        <!-- Actors -->
+        <div class="form-group">
+          <label for="actorId">Select Actors</label>
+          <select class="form-control" id="actorId" [(ngModel)]="selectedActorIds" name="actorId" multiple>
+            @for(actor of actors; track actor.actorId) {
+              <option [value]="actor.id">{{ actor.firstName }} {{ actor.lastName }}</option>
+            }
+          </select>
+        </div>
     
     <!-- Language -->
-    <div class="form-floating col-md-3">
+    <div class="form-group">
+      <label for="languageId">Language:</label>
         <select class="form-control" [class.is-invalid]="languageId.invalid" name="languageId" id="languageId"
-          [(ngModel)]="VM.Element.languageId" #languageId="ngModel" required placeholder=" ">
+          [(ngModel)]="selectedLanguageId" #languageId="ngModel" required placeholder=" ">
           @for(language of languages; track language.id) {
             <option [value]="language.languageId">{{ language.idioma }}</option>
           }
         </select>
-        <label for="languageId">Language:</label>
-        <output class="invalid-feedback" [hidden]="languageId.valid">{{ languageId.errors | errormsg }}</output>
     </div>
 
-    <!-- Categorías -->
-    <div class="form-floating col-md-4">
-      <input class="form-control" [class.is-invalid]="categories.invalid" type="text" name="categories" id="categories"
-        [(ngModel)]="VM.Element.categories" #categories="ngModel" required placeholder=" ">
-      <label for="categories">Categories (IDs):</label>
-      <output class="invalid-feedback" [hidden]="categories.valid">{{ categories.errors | errormsg }}</output>
+    <!-- Categories -->
+    <div class="form-group">
+      <label for="categorySelect">Select Categories</label>
+      <select class="form-control" id="categorySelect" [(ngModel)]="selectedCategoryIds" name="categoryId" multiple>
+        @for(category of categories; track category.id) {
+          <option [value]="category.id">{{ category.category }}</option>
+        }
+      </select>
     </div>
 
     <!-- Botones de Enviar y Volver -->

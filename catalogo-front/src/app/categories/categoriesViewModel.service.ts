@@ -7,6 +7,7 @@ import { NotificationService } from '../common-services';
 import { LoggerService } from '@my/core';
 import { Injectable } from '@angular/core';
 import { RESTDAOService } from '../common-classes/restDAOService.service';
+import { Observable } from 'rxjs';
 
 
 export type ModeCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
@@ -56,6 +57,10 @@ export class CategoriesViewModelService {
 
   public get Films(): any {
     return this.films;
+  }
+
+  public getAllCategories(): Observable<any[]> {
+    return this.dao.query(); 
   }
 
   public list(): void {

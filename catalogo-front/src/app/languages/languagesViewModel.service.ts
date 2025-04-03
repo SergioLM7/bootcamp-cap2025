@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../common-services';
 import { LoggerService } from '@my/core';
 import { RESTDAOService } from '../common-classes/restDAOService.service';
+import { Observable } from 'rxjs';
 
 
 export type ModeCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
@@ -49,6 +50,10 @@ export class LanguagesViewModelService {
   public get Element(): any {
     return this.element;
   }
+
+    public getAllLanguages(): Observable<any[]> {
+      return this.dao.query(); 
+    }
 
   public list(): void {
     this.dao.query().subscribe({

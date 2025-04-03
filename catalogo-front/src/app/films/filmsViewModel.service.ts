@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../common-services';
 import { LoggerService } from '@my/core';
 import { RESTDAOService } from '../common-classes/restDAOService.service';
+import { Observable } from 'rxjs';
 
 
 export type ModeCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
@@ -21,6 +22,11 @@ export class FilmsDAOService extends RESTDAOService<any, any> {
   constructor() {
     super('film/v1');
   }
+
+    override change(id: any, item: any): Observable<any> {
+      const url = `${this.baseUrl}/${id}`;
+      return this.http.put<any>(url, item, this.option); 
+    }
 }
 
 @Injectable({

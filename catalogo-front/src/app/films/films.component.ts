@@ -6,7 +6,9 @@ import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FilmsViewModelService } from './filmsViewModel.service';
 import { ErrorMessagePipe, TypeValidator } from '@my/core';
-import { LanguagesDAOService } from '../languages/languagesViewModel.service';
+import { CategoriesViewModelService } from '../categories/categoriesViewModel.service';
+import { LanguagesViewModelService } from '../languages/languagesViewModel.service';
+import { ActorsViewModelService } from '../actors/actorsViewModel.service';
 
 @Component({
   selector: 'app-films',
@@ -64,13 +66,43 @@ export class FilmsListComponent implements OnInit, OnDestroy {
 })
 export class FilmsAddComponent implements OnInit {
   languages: any[] = [];
-  constructor(protected vm: FilmsViewModelService, private languageService: LanguagesDAOService) {}
+  categories: any[] = [];
+  actors: any[] = [];
+  selectedCategoryIds: number[] = []; 
+  selectedLanguageId: number = 0;
+  selectedActorIds: number[] = []; 
+
+
+  constructor(protected vm: FilmsViewModelService, private languageVMService: LanguagesViewModelService, private categoriesVMService: CategoriesViewModelService, private actorsVMService: ActorsViewModelService) {}
 
   public get VM(): FilmsViewModelService {
     return this.vm;
   }
+
+
   ngOnInit(): void {
     this.vm.add();
+
+    this.actorsVMService.getAllActors().subscribe({
+      next: (actors) => {
+        this.actors = actors;
+      },
+      error: (err) => console.error('Error loading actors:', err),
+    });
+
+    this.languageVMService.getAllLanguages().subscribe({
+      next: (languages) => {
+        this.languages = languages;
+      },
+      error: (err) => console.error('Error loading languages:', err),
+    });
+
+    this.categoriesVMService.getAllCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (err) => console.error('Error loading categories:', err),
+    });
   }
 }
 
@@ -83,11 +115,20 @@ export class FilmsAddComponent implements OnInit {
 export class FilmsEditComponent implements OnInit, OnDestroy {
   private obs$?: Subscription;
   languages: any[] = [];
+  categories: any[] = [];
+  actors: any[] = [];
+  selectedCategoryIds: number[] = []; 
+  selectedLanguageId: number = 0;
+  selectedActorIds: number[] = []; 
+
 
   constructor(
     protected vm: FilmsViewModelService,
     protected route: ActivatedRoute,
     protected router: Router,
+    private categoriesVMService: CategoriesViewModelService,
+    private languageVMService: LanguagesViewModelService,
+    private actorsVMService: ActorsViewModelService
   ) {}
 
   public get VM(): FilmsViewModelService {
@@ -99,6 +140,30 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
       const id = parseInt(params?.get('id') ?? '');
       if (id) {
         this.vm.edit(id);
+
+
+        this.actorsVMService.getAllActors().subscribe({
+          next: (actors) => {
+            this.actors = actors;
+          },
+          error: (err) => console.error('Error loading actors:', err),
+        });
+
+        
+        this.languageVMService.getAllLanguages().subscribe({
+          next: (languages) => {
+            this.languages = languages;
+          },
+          error: (err) => console.error('Error loading languages:', err),
+        });
+
+        
+        this.categoriesVMService.getAllCategories().subscribe({
+          next: (categories) => {
+            this.categories = categories;
+          },
+          error: (err) => console.error('Error loading categories:', err),
+        });
        
       } else {
         this.router.navigate(['/404.html']);

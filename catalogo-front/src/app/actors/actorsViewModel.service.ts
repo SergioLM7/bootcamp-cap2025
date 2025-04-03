@@ -61,6 +61,10 @@ export class ActorsViewModelService {
     return this.films;
   }
 
+  public getAllActors(): Observable<any[]> {
+    return this.dao.query(); 
+  }
+
   public list(): void {
     this.dao.query().subscribe({
       next: (data) => {
