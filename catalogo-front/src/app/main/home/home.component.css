@@ -1,0 +1,13 @@
+.home-banner {
+    background-image: url('../../../../public/background-films.jpg'); 
+    background-size: cover;
+    background-position: center; 
+    background-attachment: fixed; 
+    height: 600px; 
+    color: white; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}

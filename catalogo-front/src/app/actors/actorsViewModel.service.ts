@@ -23,6 +23,7 @@ export class ActorsDAOService extends RESTDAOService<any, any> {
     super('actor/v1');
   }
 
+
   override change(id: any, item: any): Observable<any> {
     const url = `${this.baseUrl}/${id}`;
     return this.http.put<any>(url, item, this.option); 
