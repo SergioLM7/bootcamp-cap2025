@@ -1,42 +1,17 @@
 import {
-  HttpClient,
   HttpContextToken,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {  Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment.development';
 import { NotificationService } from '../common-services';
 import { LoggerService } from '@my/core';
+import { RESTDAOService } from '../common-classes/restDAOService.service';
 
 
 export type ModeCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
 
 export const AUTH_REQUIRED = new HttpContextToken<boolean>(() => false);
-
-export abstract class RESTDAOService<T, K> {
-  protected baseUrl = environment.apiUrl;
-  protected http: HttpClient = inject(HttpClient);
-  constructor(entity: string, protected option = {}) {
-    this.baseUrl += entity;
-  }
-  query(): Observable<T> {
-    return this.http.get<T>(this.baseUrl, this.option);
-  }
-  get(id: K): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}/${id}`, this.option);
-  }
-  add(item: T): Observable<T> {
-    return this.http.post<T>(this.baseUrl, item, this.option);
-  }
-  change(id: K, item: T): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}/${id}`, item, this.option);
-  }
-  remove(id: K): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${id}`, this.option);
-  }
-}
 
 @Injectable({
   providedIn: 'root',

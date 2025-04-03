@@ -1,17 +1,35 @@
 <h1>Category<i class="fa-solid fa-earth-europe"></i> </h1>
-@if(VM.Element) {
-  <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-6">
+@if(VM.Element && VM.Films) {
+  <div class="row w-100">
+    <div class="">
       <div class="well well-sm">
         <div class="row">
-          <div class="col-sm-6 col-md-8">
             <h4>{{ VM.Element.category }}</h4> 
             <h5>Last update: {{ VM.Element.lastUpdate }}</h5> 
-            <div class="btn-group">
-              <input class="btn btn-secondary" type="button" value="Volver" (click)="VM.cancel()">
-            </div>
+            <p><strong>Films:</strong></p>
+            <section class="row w-100">
+            @if(VM.Films.length < 1) {
+              <p>There are no films for this category</p>
+            } @else {
+            @for (film of VM.Films; track film.filmId) {
+              <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <div class="card">
+                  <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                    <h5 class="card-title">{{ film.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ film.releaseYear }}</h6>
+                    <p class="card-text">{{ film.description }}</p>
+                    <!-- TODO: Implement View More -->
+                    <a href="#" class="btn btn-primary">More</a>
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </section>
           </div>
-        </div>
+          <div class="d-flex justify-content-center align-items-center">
+            <input class="btn button-back" type="button" value="Back" (click)="VM.cancel()">
+          </div>
       </div>
     </div>
   </div>

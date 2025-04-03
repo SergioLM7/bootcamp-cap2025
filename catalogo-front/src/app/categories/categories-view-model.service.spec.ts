@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CategoriesViewModelService } from './categories-view-model.service';
+import { CategoriesViewModelService } from './categoriesViewModel.service';
 
 describe('CategoriesViewModelService', () => {
   let service: CategoriesViewModelService;
