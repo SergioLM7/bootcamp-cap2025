@@ -17,6 +17,7 @@ import { ErrorMessagePipe, TypeValidator } from '@my/core';
 import { CategoriesViewModelService } from '../categories/categoriesViewModel.service';
 import { LanguagesViewModelService } from '../languages/languagesViewModel.service';
 import { ActorsViewModelService } from '../actors/actorsViewModel.service';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-films',
@@ -49,7 +50,7 @@ export class FilmsComponent implements OnInit, OnDestroy {
   selector: 'app-films-list',
   templateUrl: './tmpl-list.component.html',
   styleUrls: ['./films.component.css'],
-  imports: [RouterLink],
+  imports: [RouterLink, PaginatorModule],
 })
 export class FilmsListComponent implements OnInit, OnDestroy {
   constructor(protected vm: FilmsViewModelService) {}
@@ -57,8 +58,17 @@ export class FilmsListComponent implements OnInit, OnDestroy {
   public get VM(): FilmsViewModelService {
     return this.vm;
   }
+
+  public get totalRecords(): number {
+    return this.vm.TotalRecords;
+  }
+
+  public paginate(event: any): void {
+    this.vm.paginate(event);
+  }
+
   ngOnInit(): void {
-    this.vm.list();
+    this.vm.listPaginated();
   }
 
   ngOnDestroy(): void {

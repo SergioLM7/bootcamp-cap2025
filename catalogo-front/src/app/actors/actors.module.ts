@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ACTORS_COMPONENTS } from './actors.component';
-import { PaginatorModule } from 'primeng/paginator';
-
+import { NgModule } from "@angular/core";
+import { ACTORS_COMPONENTS } from "./actors.component";
+import { CommonModule } from "@angular/common";
+import { PaginatorModule } from "primeng/paginator";
 
 
 @NgModule({
@@ -10,7 +9,7 @@ import { PaginatorModule } from 'primeng/paginator';
   imports: [
     CommonModule,
     ACTORS_COMPONENTS,
-    PaginatorModule
+    PaginatorModule,
   ]
 })
 export class ActorsModule { }

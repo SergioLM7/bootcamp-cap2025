@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FILMS_COMPONENTS } from './films.component';
+import { PaginatorModule } from 'primeng/paginator';
 
 
 
@@ -9,6 +10,7 @@ import { FILMS_COMPONENTS } from './films.component';
   imports: [
     CommonModule,
     FILMS_COMPONENTS,
+    PaginatorModule    
   ]
 })
 export class FilmsModule { }
