@@ -12,6 +12,16 @@ export abstract class RESTDAOService<T, K> {
     query(): Observable<T> {
       return this.http.get<T>(this.baseUrl, this.option);
     }
+    queryPaginated(page: number = 0, size: number = 10): Observable<T> {
+      const options = {
+        ...this.option,
+        params: {
+          page: page.toString(),
+          size: size.toString()
+        }
+      };
+      return this.http.get<T>(this.baseUrl, options);
+    }
     get(id: K): Observable<T> {
       return this.http.get<T>(`${this.baseUrl}/${id}`, this.option);
     }

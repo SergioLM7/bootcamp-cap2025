@@ -40,6 +40,9 @@ export class ActorsViewModelService {
   protected films: any[] = [];
   protected idOriginal: any = null;
   protected listURL = '/actors';
+  protected totalRecords: number = 0;
+  protected page: number = 0;
+  protected size: number = 10;
 
   constructor(
     protected notify: NotificationService,
@@ -62,6 +65,10 @@ export class ActorsViewModelService {
     return this.films;
   }
 
+  public get TotalRecords(): any {
+    return this.totalRecords;
+  }
+
   public getAllActors(): Observable<any[]> {
     return this.dao.query(); 
   }
@@ -74,6 +81,23 @@ export class ActorsViewModelService {
       },
       error: (err) => this.handleError(err),
     });
+  }
+
+  public listPaginated(): void {
+    this.dao.queryPaginated(this.page, this.size).subscribe({
+      next: (data) => {
+        this.listArray = data.content;
+        this.totalRecords = data.totalElements;
+        this.mode = 'list';
+      },
+      error: (err) => this.handleError(err),
+    });
+  }
+
+  public paginate(event: any): void {
+    this.page = event.page;
+    this.size = event.rows;
+    this.listPaginated();
   }
 
   public add(): void {

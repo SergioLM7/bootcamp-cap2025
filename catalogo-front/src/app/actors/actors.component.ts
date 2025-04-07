@@ -6,6 +6,7 @@ import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ErrorMessagePipe, TypeValidator, UppercaseValidator } from '@my/core';
 import { ActorsViewModelService } from './actorsViewModel.service';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-actors',
@@ -38,7 +39,7 @@ export class ActorsComponent implements OnInit, OnDestroy {
   selector: 'app-actors-list',
   templateUrl: './tmpl-list.component.html',
   styleUrls: ['./actors.component.css'],
-  imports: [RouterLink],
+  imports: [RouterLink, PaginatorModule],
 })
 export class ActorsListComponent implements OnInit, OnDestroy {
   constructor(protected vm: ActorsViewModelService) {}
@@ -46,8 +47,17 @@ export class ActorsListComponent implements OnInit, OnDestroy {
   public get VM(): ActorsViewModelService {
     return this.vm;
   }
+
+  public get totalRecords(): number {
+    return this.vm.TotalRecords;
+  }
+
+  public paginate(event: any): void {
+    this.vm.paginate(event);
+  }
+
   ngOnInit(): void {
-    this.vm.list();
+    this.vm.listPaginated();
   }
 
   ngOnDestroy(): void {
